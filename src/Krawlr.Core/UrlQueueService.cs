@@ -31,10 +31,13 @@ namespace Krawlr.Core
             if (url.StartsWith(_baseUrl) == false)
                 return;
 
-            if (List.Contains(url)) // TODO: Lock
+            var uri = new Uri(url);
+            var path = uri.LocalPath;
+
+            if (List.Contains(path)) // TODO: Lock
                 return;
 
-            List.Add(url); // TODO: Add Lock
+            List.Add(path); // TODO: Add Lock
             Queue.Enqueue(url);
         }
 
