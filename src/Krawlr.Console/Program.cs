@@ -5,6 +5,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Krawlr.Console
 {
@@ -12,28 +13,34 @@ namespace Krawlr.Console
     {
         static void Main(string[] args)
         {
-            var options = new Options();
-            CommandLine.Parser.Default.ParseArguments(args, options);
+            //var options = new Options();
+            //CommandLine.Parser.Default.ParseArguments(args, options);
 
             using (var container = new Container())
             {
-                string baseUrl = options.Url;
+                container.RegisterDelegate<IConfiguration>(r => new ConsoleConfiguration(args), Reuse.Singleton);
+                var options = container.Resolve<IConfiguration>();
 
                 container.Register<IPageAction, LoginAction>();
 
-                container.RegisterDelegate<IUrlQueueService>(r => new UrlQueueService(baseUrl), Reuse.Singleton);
+                container.RegisterDelegate<IUrlQueueService>(r => 
+                    new UrlQueueService(r.Resolve<IConfiguration>()), Reuse.Singleton);
                 container.RegisterDelegate<IWebDriver>(r => Driver());
                 container.Register<Page, Page>(); // (r => new Page(r.Resolve<IWebDriver>(), baseUrl));
-                container.RegisterDelegate<Application>(r => new Application(
-                    r.Resolve<Page>(), 
-                    r.Resolve<IUrlQueueService>(),
-                    r.Resolve<IEnumerable<IPageAction>>()), Reuse.Singleton);
+                container.RegisterDelegate<Application>(r => 
+                    new Application(
+                        r.Resolve<Page>(), 
+                        r.Resolve<IUrlQueueService>(),
+                        r.Resolve<IEnumerable<IPageAction>>(), 
+                        r.Resolve<IConfiguration>()), 
+                    Reuse.Singleton);
 
                 var queueService = container.Resolve<IUrlQueueService>();
-                queueService.Add(baseUrl);
+                queueService.Add(options.BaseUrl);
 
-                container.Resolve<Application>().Start();                
-                
+                Task.Run(() => container.Resolve<Application>().Start());
+
+                System.Console.WriteLine("Press any key to halt processing...");
                 System.Console.ReadKey();
             }
         }

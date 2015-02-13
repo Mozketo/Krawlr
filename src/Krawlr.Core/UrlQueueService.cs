@@ -10,7 +10,7 @@ namespace Krawlr.Core
 {
     public interface IUrlQueueService
     {
-        string BaseUrl { get; }
+        event ProgressEventHandler Progress;
         void Add(string url);
         string Dequeue();
         bool Peek();
@@ -21,16 +21,18 @@ namespace Krawlr.Core
         static ConcurrentQueue<string> Queue = new ConcurrentQueue<string>();
         static HashSet<string> List = new HashSet<string>();
 
-        public string BaseUrl { get; protected set; }
+        public event ProgressEventHandler Progress;
 
-        public UrlQueueService(string baseUrl)
+        IConfiguration _options;
+
+        public UrlQueueService(IConfiguration options)
         {
-            BaseUrl = baseUrl;
+            _options = options;
         }
 
         public void Add(string url)
         {
-            if (url.StartsWith(BaseUrl) == false)
+            if (!url.HasValue() || url.StartsWith(_options.BaseUrl) == false)
                 return;
 
             var uri = new Uri(url);
@@ -39,12 +41,21 @@ namespace Krawlr.Core
             if (List.Contains(path)) // TODO: Lock?
                 return;
 
+            // Is this path in the list of exclusions? If so the URL should be skipped. Example /logout might need to be ignored
+            // otherwise the crawler may leave the crawl early.
+            bool isExcluded = _options.Exclusions.Any(e => url.ContainsEx(e));
+            if (isExcluded)
+                return;
+
             List.Add(path); // TODO: Add Lock?
             Queue.Enqueue(url);
         }
 
         public string Dequeue()
         {
+            if (Progress != null)
+                Progress(this, new ProgressEventArgs { Remaining = Queue.Count, Count = List.Count() });
+
             string result;
             Queue.TryDequeue(out result);
             return result;
@@ -56,4 +67,12 @@ namespace Krawlr.Core
             return Queue.TryPeek(out result);
         }
     }
+
+    public class ProgressEventArgs : EventArgs
+    {
+        public int Remaining { get; set; }
+        public int Count { get; set; }
+    }
+
+    public delegate void ProgressEventHandler(object sender, ProgressEventArgs e);
 }

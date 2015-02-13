@@ -5,7 +5,7 @@
 
     public class LoginAction : IPageAction
     {
-        public string Url { get { return "auth/login"; } }
+        public string Url { get { return "auth/loginX"; } }
         public void Invoke(IWebDriver driver)
         {
             Func<By, string, bool> sendKey = (by, keys) =>

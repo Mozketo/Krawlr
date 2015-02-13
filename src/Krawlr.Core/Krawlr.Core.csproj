@@ -53,8 +53,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
+    <Compile Include="Extensions\DictionaryEx.cs" />
+    <Compile Include="Extensions\EnumerableEx.cs" />
+    <Compile Include="Extensions\FuncEx.cs" />
+    <Compile Include="Extensions\Options.cs" />
     <Compile Include="Extensions\StringEx.cs" />
     <Compile Include="Extensions\WebDriverEx.cs" />
+    <Compile Include="IConfiguration.cs" />
     <Compile Include="PageActions\IPageAction.cs" />
     <Compile Include="PageActions\LoginAction.cs" />
     <Compile Include="Page.cs" />
