@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Krawlr.Core.Extensions;
 
 namespace Krawlr.Core
 {
@@ -32,12 +33,12 @@ namespace Krawlr.Core
                 return;
 
             var uri = new Uri(url);
-            var path = uri.LocalPath;
+            var path = uri.LocalPath.RemoveTrailing('/');
 
-            if (List.Contains(path)) // TODO: Lock
+            if (List.Contains(path)) // TODO: Lock?
                 return;
 
-            List.Add(path); // TODO: Add Lock
+            List.Add(path); // TODO: Add Lock?
             Queue.Enqueue(url);
         }
 

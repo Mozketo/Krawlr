@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System.Collections.Generic;
-using Krawlr.Core.Infrastructure.Extensions;
+using Krawlr.Core.Extensions;
 using Fiddler;
 using System.Text.RegularExpressions;
 using System;
@@ -12,11 +12,14 @@ namespace Krawlr.Core
     {
         IWebDriver _driver;
 
+        public string BaseUrl { get; protected set; }
+
         public virtual int ReponseCode { get; protected set; }
 
-        public Page(IWebDriver driver)
+        public Page(IWebDriver driver, string baseUrl)
         {
             _driver = driver;
+            BaseUrl = baseUrl;
         }
 
         public IEnumerable<IWebElement> Links()

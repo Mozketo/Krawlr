@@ -20,37 +20,20 @@ namespace Krawlr.Console
             using (var container = new Container())
             {
                 string baseUrl = options.Url;
-
-                container.Register<IUrlQueueService>(c => new UrlQueueService(baseUrl)).ReusedWithin(ReuseScope.Container);
+                
+                container.Register<IUrlQueueService>(c => new UrlQueueService(baseUrl))
+                    .ReusedWithin(ReuseScope.Container);
                 container.Register<IWebDriver>(c => Driver());
-                container.Register<Page>(c => new Page(container.Resolve<IWebDriver>()));
+                container.Register<Page>(c => new Page(container.Resolve<IWebDriver>(), baseUrl));
+                container.Register<Application>(c => new Application(container, container.Resolve<IUrlQueueService>()))
+                    .ReusedWithin(ReuseScope.Container);
 
                 var queueService = container.Resolve<IUrlQueueService>();
                 queueService.Add(baseUrl);
 
-                var page = container.Resolve<Page>();
+                container.Resolve<Application>().Start();                
                 
-                //var links = page.Links()
-                //    .Select(el => el.GetAttribute("href")).Distinct()
-                //    .Where(t => t.StartsWith(baseUrl, StringComparison.InvariantCultureIgnoreCase));
-
-                //links.ToList().ForEach(l => queueService.Add(l));
-
-                while (queueService.Peek())
-                {
-                    // Load
-                    var url = queueService.Dequeue();
-                    page.NavigateToViewWithJsErrorProxy(url);
-
-                    // Log
-                    // TODO
-
-                    // Links?
-                    var links = page.Links()
-                        .Select(el => el.GetAttribute("href")).Distinct()
-                        .Where(t => t.StartsWith(baseUrl, StringComparison.InvariantCultureIgnoreCase));
-                    links.ToList().ForEach(l => queueService.Add(l));
-                }
+                System.Console.ReadKey();
             }
         }
 

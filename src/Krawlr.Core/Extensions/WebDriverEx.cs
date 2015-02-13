@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace Krawlr.Core.Infrastructure.Extensions
+namespace Krawlr.Core.Extensions
 {
     public static class WebDriverExtensions
     {

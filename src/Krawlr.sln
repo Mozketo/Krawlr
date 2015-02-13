@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Krawlr.Console", "Krawlr.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Krawlr.Core", "Krawlr.Core\Krawlr.Core.csproj", "{2AF4FE63-C6BB-45E1-BBA5-9D25EE7B3B32}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Krawlr.Tests", "Krawlr.Tests\Krawlr.Tests.csproj", "{891299C3-3E92-41A9-AE06-9416982DA33E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2AF4FE63-C6BB-45E1-BBA5-9D25EE7B3B32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AF4FE63-C6BB-45E1-BBA5-9D25EE7B3B32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AF4FE63-C6BB-45E1-BBA5-9D25EE7B3B32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{891299C3-3E92-41A9-AE06-9416982DA33E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{891299C3-3E92-41A9-AE06-9416982DA33E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{891299C3-3E92-41A9-AE06-9416982DA33E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{891299C3-3E92-41A9-AE06-9416982DA33E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
