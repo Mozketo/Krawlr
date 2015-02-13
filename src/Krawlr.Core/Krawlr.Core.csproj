@@ -39,9 +39,6 @@
     <Reference Include="FiddlerCore4">
       <HintPath>..\packages\FiddlerCore.4.4.8.4\lib\net40\FiddlerCore4.dll</HintPath>
     </Reference>
-    <Reference Include="Funq">
-      <HintPath>..\packages\Funq.1.0.0\lib\net40\Funq.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -58,6 +55,8 @@
     <Compile Include="Application.cs" />
     <Compile Include="Extensions\StringEx.cs" />
     <Compile Include="Extensions\WebDriverEx.cs" />
+    <Compile Include="PageActions\IPageAction.cs" />
+    <Compile Include="PageActions\LoginAction.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UrlQueueService.cs" />

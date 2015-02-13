@@ -10,21 +10,19 @@ namespace Krawlr.Core
 {
     public class Page
     {
-        IWebDriver _driver;
-
-        public string BaseUrl { get; protected set; }
+        //IWebDriver _driver;
+        public IWebDriver Driver { get; protected set; }
 
         public virtual int ReponseCode { get; protected set; }
 
-        public Page(IWebDriver driver, string baseUrl)
+        public Page(IWebDriver driver)
         {
-            _driver = driver;
-            BaseUrl = baseUrl;
+            Driver = driver;
         }
 
         public IEnumerable<IWebElement> Links()
         {
-            var links = _driver.FindElements(By.TagName("a"));
+            var links = Driver.FindElements(By.TagName("a"));
             return links;
         }
 
@@ -67,7 +65,7 @@ namespace Krawlr.Core
             FiddlerApplication.BeforeRequest += beforeRequestHandler;
             FiddlerApplication.BeforeResponse += beforeResponseHandler;
             FiddlerApplication.ResponseHeadersAvailable += responseheadersAvailable;
-            _driver.Navigate(targetUrl);
+            Driver.Navigate(targetUrl);
             FiddlerApplication.BeforeResponse -= beforeResponseHandler;
             FiddlerApplication.BeforeRequest -= beforeRequestHandler;
             FiddlerApplication.ResponseHeadersAvailable -= responseheadersAvailable;
@@ -82,7 +80,7 @@ namespace Krawlr.Core
 
             DateTime endTime = DateTime.Now.Add(timeout);
             List<string> errorList = new List<string>();
-            IJavaScriptExecutor executor = _driver as IJavaScriptExecutor;
+            IJavaScriptExecutor executor = Driver as IJavaScriptExecutor;
             var returnedList = executor.ExecuteScript(errorRetrievalScript) as IEnumerable<object>;
 
             while (returnedList == null && DateTime.Now < endTime)

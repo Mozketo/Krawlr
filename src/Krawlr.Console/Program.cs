@@ -1,12 +1,10 @@
-﻿using Funq;
+﻿using DryIoc;
 using Krawlr.Core;
+using Krawlr.Core.PageActions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Krawlr.Console
 {
@@ -20,13 +18,16 @@ namespace Krawlr.Console
             using (var container = new Container())
             {
                 string baseUrl = options.Url;
-                
-                container.Register<IUrlQueueService>(c => new UrlQueueService(baseUrl))
-                    .ReusedWithin(ReuseScope.Container);
-                container.Register<IWebDriver>(c => Driver());
-                container.Register<Page>(c => new Page(container.Resolve<IWebDriver>(), baseUrl));
-                container.Register<Application>(c => new Application(container, container.Resolve<IUrlQueueService>()))
-                    .ReusedWithin(ReuseScope.Container);
+
+                container.Register<IPageAction, LoginAction>();
+
+                container.RegisterDelegate<IUrlQueueService>(r => new UrlQueueService(baseUrl), Reuse.Singleton);
+                container.RegisterDelegate<IWebDriver>(r => Driver());
+                container.Register<Page, Page>(); // (r => new Page(r.Resolve<IWebDriver>(), baseUrl));
+                container.RegisterDelegate<Application>(r => new Application(
+                    r.Resolve<Page>(), 
+                    r.Resolve<IUrlQueueService>(),
+                    r.Resolve<IEnumerable<IPageAction>>()), Reuse.Singleton);
 
                 var queueService = container.Resolve<IUrlQueueService>();
                 queueService.Add(baseUrl);

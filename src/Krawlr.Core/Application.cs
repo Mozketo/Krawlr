@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Krawlr.Core.Extensions;
+using Krawlr.Core.PageActions;
 
 namespace Krawlr.Core
 {
-    using Funq;
-
     public class Application
     {
-        protected Container _container;
+        protected Page _page;
         protected IUrlQueueService _queueService;
+        protected IEnumerable<IPageAction> _pageActions;
 
-        public Application(Container container, IUrlQueueService urlQueueService)
+        public Application(Page page, IUrlQueueService urlQueueService, IEnumerable<IPageAction> pageActions)
         {
-            _container = container;
+            _page = page;
             _queueService = urlQueueService;
+            _pageActions = pageActions;
         }
 
         public void Start()
         {
-            var page = _container.Resolve<Page>();
-
             //var links = page.Links()
             //    .Select(el => el.GetAttribute("href")).Distinct()
             //    .Where(t => t.StartsWith(baseUrl, StringComparison.InvariantCultureIgnoreCase));
@@ -33,16 +31,22 @@ namespace Krawlr.Core
             {
                 // Load
                 var url = _queueService.Dequeue();
-                page.NavigateToViewWithJsErrorProxy(url);
+                _page.NavigateToViewWithJsErrorProxy(url);
 
                 // Log
                 // TODO
                 System.Console.WriteLine(String.Format("Navigating to {0}", url));
 
+                // Actions to perform on this URL?
+                _pageActions
+                    .Where(a => url.ContainsEx(a.Url)).ToList()
+                    .ForEach(pa => pa.Invoke(_page.Driver));
+
                 // Links?
-                var links = page.Links()
+                var links = _page.Links()
                     .Select(el => el.GetAttribute("href")).Distinct()
-                    .Where(t => t.StartsWith(page.BaseUrl, StringComparison.InvariantCultureIgnoreCase));
+                    .Where(t => t != null)
+                    .Where(t => t.StartsWith(_queueService.BaseUrl, StringComparison.InvariantCultureIgnoreCase));
                 links.ToList().ForEach(l => _queueService.Add(l));
             }
         }

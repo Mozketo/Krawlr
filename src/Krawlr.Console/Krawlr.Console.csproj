@@ -35,9 +35,6 @@
     <Reference Include="CommandLine">
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
     </Reference>
-    <Reference Include="Funq">
-      <HintPath>..\packages\Funq.1.0.0\lib\net40\Funq.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -52,6 +49,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DryIoc\Container.cs" />
+    <Compile Include="DryIoc\FactoryCompiler.cs" />
+    <Compile Include="DryIoc\InternalsVisibleToDryIocFactoryCompilerDynamicAssembly.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

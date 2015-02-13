@@ -10,6 +10,7 @@ namespace Krawlr.Core
 {
     public interface IUrlQueueService
     {
+        string BaseUrl { get; }
         void Add(string url);
         string Dequeue();
         bool Peek();
@@ -20,16 +21,16 @@ namespace Krawlr.Core
         static ConcurrentQueue<string> Queue = new ConcurrentQueue<string>();
         static HashSet<string> List = new HashSet<string>();
 
-        protected string _baseUrl;
+        public string BaseUrl { get; protected set; }
 
         public UrlQueueService(string baseUrl)
         {
-            _baseUrl = baseUrl;
+            BaseUrl = baseUrl;
         }
 
         public void Add(string url)
         {
-            if (url.StartsWith(_baseUrl) == false)
+            if (url.StartsWith(BaseUrl) == false)
                 return;
 
             var uri = new Uri(url);
