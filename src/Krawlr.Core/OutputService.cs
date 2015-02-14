@@ -29,6 +29,7 @@ namespace Krawlr.Core
                 if (File.Exists(_configuration.OutputPath))
                     File.Delete(_configuration.OutputPath);
                 _writer = new StreamWriter(_configuration.OutputPath);
+                _writer.AutoFlush = false;
                 _csv = new CsvWriter(_writer);
                 _csv.Configuration.HasHeaderRecord = true;
                 var map = _csv.Configuration.AutoMap<Response>();

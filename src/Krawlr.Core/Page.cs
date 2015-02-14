@@ -20,9 +20,20 @@ namespace Krawlr.Core
             Driver = driver;
         }
 
-        public IEnumerable<IWebElement> Links()
+        public IEnumerable<string> Links()
         {
-            var links = Driver.FindElements(By.TagName("a"));
+            var links = Driver.FindElements(By.TagName("a"))
+                .Select(el =>
+                {
+                    try
+                    {
+                        return el.GetAttribute("href");
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                });
             return links;
         }
 

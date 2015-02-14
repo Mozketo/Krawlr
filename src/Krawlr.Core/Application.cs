@@ -60,9 +60,9 @@ namespace Krawlr.Core
                 // Selenium scripts for this URL
                 _pageActionService.Invoke(response.Url);
 
-                // Links
-                var links = _page.Links()
-                    .Select(el => el.GetAttribute("href")).Distinct();
+                // Get links
+                var links = _page.Links().Distinct();
+                // Process links
                 links.ToList().ForEach(l => _queueService.Add(l));
             }
         }
