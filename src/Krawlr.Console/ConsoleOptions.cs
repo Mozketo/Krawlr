@@ -20,13 +20,13 @@ namespace Krawlr.Core
         [Option('u', "url", Required = true, HelpText = "URL to start crawling.")]
         public string BaseUrl { get; set; }
 
-        [Option('f', "follow", Required = false, HelpText = "If true after the page is ready it will be checked for all a href links and be added to the queue of pages to load. Default: true")]
+        [Option('f', "follow-links", Required = false, HelpText = "If true after the page is ready it will be checked for all a href links and be added to the queue of pages to load. Default: true")]
         public bool FollowPageLinks { get; set; }
 
-        [Option("exclusions", Required = false, HelpText = "List of URLs that should be ignored.")]
+        [Option('e', "exclusions", Required = false, HelpText = "List of URLs that should be ignored.")]
         public string ExclusionsFilePath { get; set; }
 
-        [Option("inclusions", Required = false, HelpText = "List of URLs to follow. When supplied Krawlr will not crawl for links.")]
+        [Option('i', "inclusions", Required = false, HelpText = "List of URLs to follow. When supplied Krawlr will not crawl for links.")]
         public string InclusionsFilePath { get; set; }
 
         [Option('s', "scripts", Required = false, HelpText = "After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.")]
