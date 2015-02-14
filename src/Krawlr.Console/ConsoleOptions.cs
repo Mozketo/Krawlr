@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
-using Krawlr.Core;
 using Krawlr.Core.Extensions;
 using System.Linq;
 
@@ -15,6 +14,7 @@ namespace Krawlr.Core
         {
             CommandLine.Parser.Default.ParseArguments(args, this);
             FollowPageLinks = true;
+            PageScriptsPath = Path.GetDirectoryName(typeof(Application).Assembly.Location);
         }
 
         [Option('u', "url", Required = true, HelpText = "URL to start crawling.")]
@@ -28,6 +28,9 @@ namespace Krawlr.Core
 
         [Option("inclusions", Required = false, HelpText = "List of URLs to follow. When supplied Krawlr will not crawl for links.")]
         public string InclusionsFilePath { get; set; }
+
+        [Option('s', "scripts", Required = false, HelpText = "After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.")]
+        public string PageScriptsPath { get; set; }
 
         public IEnumerable<string> Exclusions { get { return readFile(ExclusionsFilePath); } }
         public IEnumerable<string> Inclusions { get { return readFile(InclusionsFilePath); } }

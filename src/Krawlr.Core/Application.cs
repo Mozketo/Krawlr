@@ -10,16 +10,18 @@ namespace Krawlr.Core
     {
         protected Page _page;
         protected IUrlQueueService _queueService;
-        protected IEnumerable<IPageAction> _pageActions;
         protected IConfiguration _configuration;
+        protected IPageActionService _pageActionService;
 
-        public Application(Page page, IUrlQueueService urlQueueService, IEnumerable<IPageAction> pageActions,
-            IConfiguration configuration)
+        public Application(Page page, 
+            IUrlQueueService urlQueueService, 
+            IConfiguration configuration,
+            IPageActionService pageActionService)
         {
             _page = page;
             _queueService = urlQueueService;
-            _pageActions = pageActions;
             _configuration = configuration;
+            _pageActionService = pageActionService;
 
             _queueService.Progress += (sender, args) =>
             {
@@ -53,9 +55,10 @@ namespace Krawlr.Core
                     (errors.Any()) ? "Yes" : "No"));
 
                 // Actions to perform on this URL?
-                _pageActions
-                    .Where(a => url.ContainsEx(a.Url)).ToList()
-                    .ForEach(pa => pa.Invoke(_page.Driver));
+                _pageActionService.GenerateInstances(url);
+                //_pageActions
+                //    .Where(a => url.ContainsEx(a.Url)).ToList()
+                //    .ForEach(pa => pa.Invoke(_page.Driver));
 
                 // Links
                 var links = _page.Links()

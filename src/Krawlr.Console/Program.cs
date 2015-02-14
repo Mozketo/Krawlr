@@ -21,18 +21,17 @@ namespace Krawlr.Console
                 container.RegisterDelegate<IConfiguration>(r => new ConsoleConfiguration(args), Reuse.Singleton);
                 var options = container.Resolve<IConfiguration>();
 
-                container.Register<IPageAction, LoginAction>();
-
                 container.RegisterDelegate<IUrlQueueService>(r => 
                     new UrlQueueService(r.Resolve<IConfiguration>()), Reuse.Singleton);
-                container.RegisterDelegate<IWebDriver>(r => Driver());
+                container.RegisterDelegate<IWebDriver>(r => Driver(), Reuse.Singleton);
+                container.Register<IPageActionService, PageActionService>();
                 container.Register<Page, Page>(); // (r => new Page(r.Resolve<IWebDriver>(), baseUrl));
                 container.RegisterDelegate<Application>(r => 
                     new Application(
                         r.Resolve<Page>(), 
                         r.Resolve<IUrlQueueService>(),
-                        r.Resolve<IEnumerable<IPageAction>>(), 
-                        r.Resolve<IConfiguration>()), 
+                        r.Resolve<IConfiguration>(),
+                        r.Resolve<IPageActionService>()), 
                     Reuse.Singleton);
 
                 var queueService = container.Resolve<IUrlQueueService>();
