@@ -9,12 +9,14 @@
 
         string BaseUrl { get; set; }
         bool FollowPageLinks { get; set; }
+        bool Silent { get; set; }
         int MaxPageLinksToFollow { get; set; }
         string PageScriptsPath { get; set; }
         string ExclusionsFilePath { get; set; }
         string InclusionsFilePath { get; set; }
         IEnumerable<string> Exclusions { get; }
         IEnumerable<string> Inclusions { get; }
+        string OutputPath { get; set; }
 
         // Configuration settings for WebDriver
         string WebDriver { get; } // Chrome, Firefox...

@@ -24,6 +24,7 @@ After cloning the source and building let's leverage the command-line.
     --max-follow-links Limit the number of pages to crawl. Default: 0 (no limit)
     -e, --exclusions Path to a file with list of routes/keywords in URL to bypass.
     -i, --inclusions Path to a file with a hard list of routes to hit (will follow in order). Use with --follow=false
+    -o, --output Write crawling activity to CSV file with path. Including URL, response code, javascript errors, time taken. (Some features require FiddleCore proxy enabled).
     -s, --scripts After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.
     -w, --webdriver Define WebDriver to use. Firefox, Chrome, Remote (Default: Chrome)
     --webdriver-proxy Using Chrome or Remote should route via Fiddler Core? (Default: true)
@@ -41,7 +42,12 @@ Take a look at a *sample* or two in the source [repo](src/Krawlr.Console/PageAct
 
 ## Reporting
 
-TODO
+By enabling the `--output` commandline argument a crawl history will be written out with the following headers:
+
+* URL,
+* Page response code (eg 200, 404, 500),
+* If Javascript errors were present on the page,
+* Time taken for the page to load and DOM ready (in milliseconds).
 
 ## Inclusions / Exclusions
 

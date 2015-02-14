@@ -10,23 +10,29 @@ namespace Krawlr.Core
         protected IUrlQueueService _queueService;
         protected IConfiguration _configuration;
         protected IPageActionService _pageActionService;
+        protected IOutputService _outputService;
 
-        public Application(Page page, 
-            IUrlQueueService urlQueueService, 
+        public Application(Page page,
+            IUrlQueueService urlQueueService,
             IConfiguration configuration,
-            IPageActionService pageActionService)
+            IPageActionService pageActionService,
+            IOutputService outputService)
         {
             _page = page;
             _queueService = urlQueueService;
             _configuration = configuration;
             _pageActionService = pageActionService;
+            _outputService = outputService;
 
-            _queueService.Progress += (sender, args) =>
+            if (!_configuration.Silent)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(String.Format("{0} pages remaining", args.Remaining));
-                Console.ResetColor();
-            };
+                _queueService.Progress += (sender, args) =>
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(String.Format("{0} pages remaining", args.Remaining));
+                    Console.ResetColor();
+                };
+            }
         }
 
         public void Start()
@@ -36,33 +42,31 @@ namespace Krawlr.Core
 
             while (_queueService.Peek())
             {
-                // Load
+                var response = new Response();
                 var timer = System.Diagnostics.Stopwatch.StartNew();
-                var url = _queueService.Dequeue();
-                _page.NavigateToViewWithJsErrorProxy(url);
-                TimeSpan timeTaken = timer.Elapsed;
+
+                // Load
+                response.Url = _queueService.Dequeue();
+                _page.NavigateToViewWithJsErrorProxy(response.Url);
+                response.TimeTakenMs = timer.ElapsedMilliseconds;
 
                 // Page errors?
-                var errors = _page.GetJavaScriptErrors(TimeSpan.FromMinutes(1));
+                response.JavascriptErrors = _page.GetJavaScriptErrors(TimeSpan.FromMinutes(1));
+                response.Code = _page.ReponseCode;
 
                 // Log
-                Console.WriteLine(String.Format("Navigating in {0} ms to {1} with status code of {2}. JS Errors? {3}",
-                    timeTaken.TotalMilliseconds,
-                    url,
-                    _page.ReponseCode,
-                    (errors.Any()) ? "Yes" : "No"));
+                _outputService.Write(response);
 
                 // Actions to perform on this URL?
-                _pageActionService.GenerateInstances(url);
-                //_pageActions
-                //    .Where(a => url.ContainsEx(a.Url)).ToList()
-                //    .ForEach(pa => pa.Invoke(_page.Driver));
+                _pageActionService.GenerateInstances(response.Url);
 
                 // Links
                 var links = _page.Links()
                     .Select(el => el.GetAttribute("href")).Distinct();
                 links.ToList().ForEach(l => _queueService.Add(l));
             }
+
+            //_outputService.Dispose();
         }
     }
 }

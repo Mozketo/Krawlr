@@ -25,6 +25,9 @@ namespace Krawlr.Core
         [Option('u', "url", Required = true, HelpText = "URL to start crawling.")]
         public string BaseUrl { get; set; }
 
+        [Option('s', "silent", Required = true, HelpText = "URL to start crawling. (Default: false)")]
+        public bool Silent { get; set; }
+
         [Option('f', "follow-links", Required = false, HelpText = "After loading a page should links on the page be followed? (Default: true)")]
         public bool FollowPageLinks { get; set; }
 
@@ -39,6 +42,9 @@ namespace Krawlr.Core
 
         [Option('s', "scripts", Required = false, HelpText = "After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.")]
         public string PageScriptsPath { get; set; }
+
+        [Option('o', "output", Required = false, HelpText = "Write crawling activity to CSV file with path...")]
+        public string OutputPath { get; set; }
 
         public IEnumerable<string> Exclusions { get { return readFile(ExclusionsFilePath); } }
         public IEnumerable<string> Inclusions { get { return readFile(InclusionsFilePath); } }

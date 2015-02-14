@@ -14,33 +14,25 @@ namespace Krawlr.Console
             using (var container = new Container())
             {
                 container.RegisterDelegate<IConfiguration>(r => new ConsoleConfiguration(args), Reuse.Singleton);
-                var options = container.Resolve<IConfiguration>();
-                if (options.HasError)
+                var configuration = container.Resolve<IConfiguration>();
+                if (configuration.HasError)
                     return;
 
-                container.RegisterDelegate<IUrlQueueService>(r => 
+                container.Register<IOutputService, OutputService>(Reuse.Singleton);
+                container.RegisterDelegate<IUrlQueueService>(r =>
                     new UrlQueueService(r.Resolve<IConfiguration>()), Reuse.Singleton);
 
                 container.Register<IWebDriverService, WebDriverService>();
                 container.RegisterDelegate<IWebDriver>(r => r.Resolve<IWebDriverService>().Get(), Reuse.Singleton);
 
-                container.Register<IPageActionService, PageActionService>();
-                container.Register<Page, Page>(); // (r => new Page(r.Resolve<IWebDriver>(), baseUrl));
-                container.RegisterDelegate<Application>(r => 
-                    new Application(
-                        r.Resolve<Page>(), 
-                        r.Resolve<IUrlQueueService>(),
-                        r.Resolve<IConfiguration>(),
-                        r.Resolve<IPageActionService>()), 
-                    Reuse.Singleton);
+                container.Register<IPageActionService, PageActionService>(Reuse.Singleton);
+                container.Register<Page, Page>();
+                container.Register<Application, Application>(Reuse.Singleton);
 
                 var queueService = container.Resolve<IUrlQueueService>();
-                queueService.Add(options.BaseUrl);
+                queueService.Add(configuration.BaseUrl);
 
-                Task.Run(() => container.Resolve<Application>().Start());
-
-                System.Console.WriteLine("Press any key to halt processing...");
-                System.Console.ReadKey();
+                container.Resolve<Application>().Start();
             }
         }
     }
