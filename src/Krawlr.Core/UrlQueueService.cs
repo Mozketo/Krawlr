@@ -47,6 +47,9 @@ namespace Krawlr.Core
             if (isExcluded)
                 return;
 
+            if (_options.MaxPageLinksToFollow > 0 && List.Count() > _options.MaxPageLinksToFollow)
+                return;
+
             List.Add(path); // TODO: Add Lock?
             Queue.Enqueue(url);
         }

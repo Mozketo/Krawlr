@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Krawlr.Core.PageActions;
 using Krawlr.Core.Extensions;
 using System.IO;
 using Jint;

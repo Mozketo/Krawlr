@@ -18,18 +18,23 @@ namespace Krawlr.Core
             HasError = !CommandLine.Parser.Default.ParseArguments(args, this);
             FollowPageLinks = true;
             PageScriptsPath = Path.GetDirectoryName(typeof(Application).Assembly.Location);
+            WebDriver = "Chrome";
+            WebDriverUseFiddlerProxy = true;
         }
 
         [Option('u', "url", Required = true, HelpText = "URL to start crawling.")]
         public string BaseUrl { get; set; }
 
-        [Option('f', "follow-links", Required = false, HelpText = "If true after the page is ready it will be checked for all a href links and be added to the queue of pages to load. Default: true")]
+        [Option('f', "follow-links", Required = false, HelpText = "After loading a page should links on the page be followed? (Default: true)")]
         public bool FollowPageLinks { get; set; }
 
-        [Option('e', "exclusions", Required = false, HelpText = "List of URLs that should be ignored.")]
+        [Option("max-follow-links", Required = false, HelpText = "Limit the number of pages to crawl. Default: 0 (no limit)")]
+        public int MaxPageLinksToFollow { get; set; }
+
+        [Option('e', "exclusions", Required = false, HelpText = "Path to a file with list of routes/keywords in URL to bypass.")]
         public string ExclusionsFilePath { get; set; }
 
-        [Option('i', "inclusions", Required = false, HelpText = "List of URLs to follow. When supplied Krawlr will not crawl for links.")]
+        [Option('i', "inclusions", Required = false, HelpText = "Path to a file with a hard list of routes to hit (will follow in order). Use with --follow-links false")]
         public string InclusionsFilePath { get; set; }
 
         [Option('s', "scripts", Required = false, HelpText = "After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.")]
@@ -37,6 +42,14 @@ namespace Krawlr.Core
 
         public IEnumerable<string> Exclusions { get { return readFile(ExclusionsFilePath); } }
         public IEnumerable<string> Inclusions { get { return readFile(InclusionsFilePath); } }
+
+        // WebDriver configuration and Fiddler proxy
+        [Option('w', "webdriver", Required = false, HelpText = "Define WebDriver to use. Firefox, Chrome, Remote (Default: Chrome)")]
+        public string WebDriver { get; set; }
+        [Option("webdriver-proxy", Required = false, HelpText = "Using Chrome or Remote should route via Fiddler Core? (Default: true) ")]
+        public bool WebDriverUseFiddlerProxy { get; set; }
+        [Option("webdriver-proxy-port", Required = false, HelpText = "If WebDriver proxy is engaged define the port to use. (Default: 0 (autoselect))")]
+        public int WebDriverFiddlerProxyPort { get; set; }
 
         [HelpOption]
         public string GetUsage()

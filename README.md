@@ -19,11 +19,15 @@ After cloning the source and building let's leverage the command-line.
 
 ## Arguments
 
-    -u, --url URL to crawl.
+    -u, --url Required. URL to start crawling.
+    -f, --follow-links If true after the page is ready it will be checked for all a href links and be added to the queue of pages to load. (Default: true)
+    --max-follow-links Limit the number of pages to crawl. Default: 0 (no limit)
     -e, --exclusions Path to a file with list of routes/keywords in URL to bypass.
     -i, --inclusions Path to a file with a hard list of routes to hit (will follow in order). Use with --follow=false
-    -f, --follow-links After loading a page should links on the page be followed?
-    -s, --scripts As a page DOM is ready look for PageAction-*.js Selenium scripts to execute.
+    -s, --scripts After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.
+    -w, --webdriver Define WebDriver to use. Firefox, Chrome, Remote (Default: Chrome)
+    --webdriver-proxy Using Chrome or Remote should route via Fiddler Core? (Default: true)
+    --webdriver-proxy-port If WebDriver proxy is engaged define the port to use. (Default: 0 (autoselect))
     -h, --help Display commandline argument help page.
     
 ## Selenium scripts (aka Page Actions)

@@ -71,10 +71,10 @@
     <Compile Include="Extensions\WebDriverEx.cs" />
     <Compile Include="IConfiguration.cs" />
     <Compile Include="PageActionService.cs" />
-    <Compile Include="PageActions\LoginAction.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UrlQueueService.cs" />
+    <Compile Include="WebDriverService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

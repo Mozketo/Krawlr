@@ -25,6 +25,14 @@ namespace Krawlr.Core.Extensions
         }
 
         /// <summary>
+        /// Case insensitive string comparison
+        /// </summary>
+        public static bool EqualsEx(this string value, string compareTo)
+        {
+            return value.Equals(compareTo, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        /// <summary>
         /// (IS) Returns string.Empty if this string is null
         /// </summary>
         /// <param name="value">this string</param>
