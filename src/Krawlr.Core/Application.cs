@@ -57,16 +57,14 @@ namespace Krawlr.Core
                 // Log
                 _outputService.Write(response);
 
-                // Actions to perform on this URL?
-                _pageActionService.GenerateInstances(response.Url);
+                // Selenium scripts for this URL
+                _pageActionService.Invoke(response.Url);
 
                 // Links
                 var links = _page.Links()
                     .Select(el => el.GetAttribute("href")).Distinct();
                 links.ToList().ForEach(l => _queueService.Add(l));
             }
-
-            //_outputService.Dispose();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Krawlr.Core
 {
     public interface IPageActionService
     {
-        void GenerateInstances(string url);
+        void Invoke(string url);
     }
 
     public class PageActionService : IPageActionService
@@ -37,7 +37,7 @@ namespace Krawlr.Core
         })
        .Memoize(threadSafe: true);
 
-        public void GenerateInstances(string url)
+        public void Invoke(string url)
         {
             var engine = new Engine(cfg => cfg.AllowClr(typeof(By).Assembly))
                 .SetValue("url", url)
