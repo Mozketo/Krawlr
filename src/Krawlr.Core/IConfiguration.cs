@@ -4,6 +4,9 @@
 
     public interface IConfiguration
     {
+        bool HasError { get; }
+        string GetUsage();
+
         string BaseUrl { get; set; }
         bool FollowPageLinks { get; set; }
         string PageScriptsPath { get; set; }

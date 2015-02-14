@@ -20,6 +20,11 @@ namespace Krawlr.Console
             {
                 container.RegisterDelegate<IConfiguration>(r => new ConsoleConfiguration(args), Reuse.Singleton);
                 var options = container.Resolve<IConfiguration>();
+                if (options.HasError)
+                {
+                    //System.Console.WriteLine(options.GetUsage());
+                    return;
+                }
 
                 container.RegisterDelegate<IUrlQueueService>(r => 
                     new UrlQueueService(r.Resolve<IConfiguration>()), Reuse.Singleton);

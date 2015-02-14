@@ -19,11 +19,12 @@ After cloning the source and building let's leverage the command-line.
 
 ## Arguments
 
-    -u, --url URL to crawl
-    -e, --exclusions Path to a file with list of routes/keywords in URL to bypass
+    -u, --url URL to crawl.
+    -e, --exclusions Path to a file with list of routes/keywords in URL to bypass.
     -i, --inclusions Path to a file with a hard list of routes to hit (will follow in order). Use with --follow=false
     -f, --follow-links After loading a page should links on the page be followed?
     -s, --scripts As a page DOM is ready look for PageAction-*.js Selenium scripts to execute.
+    -h, --help Display commandline argument help page.
     
 ## Selenium scripts (aka Page Actions)
 

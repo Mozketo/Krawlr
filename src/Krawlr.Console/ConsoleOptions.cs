@@ -5,14 +5,17 @@ using System.Collections.Generic;
 using System.Text;
 using Krawlr.Core.Extensions;
 using System.Linq;
+using CommandLine.Text;
 
 namespace Krawlr.Core
 {
     public class ConsoleConfiguration : IConfiguration
     {
+        public bool HasError { get; protected set; }
+
         public ConsoleConfiguration(string[] args)
         {
-            CommandLine.Parser.Default.ParseArguments(args, this);
+            HasError = !CommandLine.Parser.Default.ParseArguments(args, this);
             FollowPageLinks = true;
             PageScriptsPath = Path.GetDirectoryName(typeof(Application).Assembly.Location);
         }
@@ -38,14 +41,9 @@ namespace Krawlr.Core
         [HelpOption]
         public string GetUsage()
         {
-            // this without using CommandLine.Text
-            //  or using HelpText.AutoBuild
-            var usage = new StringBuilder();
-            usage.AppendLine(String.Format("Krawlr {0}.{1}", "0", "0"));
-            usage.AppendLine("-u --url http://site.com/");
-            usage.AppendLine("--exclude exclude.txt");
-            usage.AppendLine("--include include.txt");
-            return usage.ToString();
+            var help = HelpText.AutoBuild(this);
+            help.Copyright = "Copyright 2015 Ben Clark-Robinson";
+            return help.ToString();
         }
 
         static Func<string, IEnumerable<string>> readFile = new Func<string, IEnumerable<string>>(path =>
