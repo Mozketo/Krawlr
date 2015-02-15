@@ -23,17 +23,21 @@ namespace Krawlr.Core
         public IEnumerable<string> Links()
         {
             var links = Driver.FindElements(By.TagName("a"))
-                .Where(el => el.Enabled)
+                .Where(el =>
+                {
+                    try
+                    {
+                        return el.Enabled;
+                    }
+                    catch { return false; }
+                })
                 .Select(el =>
                 {
                     try
                     {
                         return el.GetAttribute("href");
                     }
-                    catch
-                    {
-                        return null;
-                    }
+                    catch { return null; }
                 });
             return links;
         }
