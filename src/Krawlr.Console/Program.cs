@@ -1,5 +1,6 @@
 ﻿using DryIoc;
 using Krawlr.Core;
+using Krawlr.Core.Services;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;

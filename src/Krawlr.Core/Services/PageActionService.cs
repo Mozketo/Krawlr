@@ -6,7 +6,7 @@ using System.IO;
 using Jint;
 using OpenQA.Selenium;
 
-namespace Krawlr.Core
+namespace Krawlr.Core.Services
 {
     public interface IPageActionService
     {

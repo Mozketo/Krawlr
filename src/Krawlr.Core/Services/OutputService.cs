@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Krawlr.Core.Extensions;
 
-namespace Krawlr.Core
+namespace Krawlr.Core.Services
 {
     public interface IOutputService// : IDisposable
     {

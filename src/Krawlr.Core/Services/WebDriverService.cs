@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using Krawlr.Core.Extensions;
 
-namespace Krawlr.Core
+namespace Krawlr.Core.Services
 {
     public interface IWebDriverService
     {
