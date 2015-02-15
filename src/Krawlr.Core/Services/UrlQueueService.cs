@@ -12,7 +12,8 @@ namespace Krawlr.Core.Services
     {
         event ProgressEventHandler Progress;
         void Add(string url);
-        string Dequeue();
+        bool TryDequeue(out string url);
+        bool TryPeek(out string url);
         bool Peek();
     }
 
@@ -54,20 +55,25 @@ namespace Krawlr.Core.Services
             Queue.Enqueue(url);
         }
 
-        public string Dequeue()
+        public bool TryDequeue(out string url)
         {
             if (Progress != null)
                 Progress(this, new ProgressEventArgs { Remaining = Queue.Count, Count = List.Count() });
 
-            string result;
-            Queue.TryDequeue(out result);
+            bool result = Queue.TryDequeue(out url);
+            return result;
+        }
+
+        public bool TryPeek(out string url)
+        {
+            bool result = Queue.TryPeek(out url);
             return result;
         }
 
         public bool Peek()
         {
-            string result;
-            return Queue.TryPeek(out result);
+            string url;
+            return Queue.TryPeek(out url);
         }
     }
 

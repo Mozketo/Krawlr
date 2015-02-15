@@ -41,13 +41,13 @@ namespace Krawlr.Core
             if (_configuration.Inclusions.Any())
                 _configuration.Inclusions.Iter(i => _queueService.Add(i));
 
-            while (_queueService.Peek())
+            string url;
+            while (_queueService.TryDequeue(out url))
             {
-                var response = new Response();
+                var response = new Response { Url = url };
                 var timer = System.Diagnostics.Stopwatch.StartNew();
 
                 // Load
-                response.Url = _queueService.Dequeue();
                 _page.NavigateToViewWithJsErrorProxy(response.Url);
                 response.TimeTakenMs = timer.ElapsedMilliseconds;
 
