@@ -37,7 +37,7 @@ namespace Krawlr.Core.Services
                 return;
 
             var uri = new Uri(url);
-            var path = uri.LocalPath.RemoveTrailing('/');
+            var path = $"{uri.LocalPath}{uri.Fragment}".RemoveTrailing('#').RemoveTrailing('/');
 
             if (List.Contains(path)) // TODO: Lock?
                 return;
