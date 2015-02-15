@@ -19,8 +19,9 @@
         string OutputPath { get; set; }
 
         // Configuration settings for WebDriver
-        string WebDriver { get; } // Chrome, Firefox...
-        bool WebDriverUseFiddlerProxy { get; }
-        int WebDriverFiddlerProxyPort { get; }
+        string RemoteDriverPath { get; set; }
+        string WebDriver { get; set; } // Chrome, Firefox...
+        bool WebDriverUseFiddlerProxy { get; set; }
+        int WebDriverFiddlerProxyPort { get; set; }
     }
 }

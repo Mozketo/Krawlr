@@ -4,17 +4,20 @@ using OpenQA.Selenium.Remote;
 using System;
 using System.Linq;
 using Krawlr.Core.Extensions;
+using System.Diagnostics;
 
 namespace Krawlr.Core.Services
 {
     public interface IWebDriverService
     {
         IWebDriver Get();
+        void StartRemoteDriverIf();
     }
 
-    public class WebDriverService : IWebDriverService
+    public class WebDriverService : IWebDriverService, IDisposable
     {
         protected IConfiguration _configuration;
+        protected Process _process;
 
         public WebDriverService(IConfiguration configuration)
         {
@@ -56,6 +59,27 @@ namespace Krawlr.Core.Services
 
             int proxyPort = FiddlerApplication.oProxy.ListenPort;
             return proxyPort;
+        }
+
+        public void StartRemoteDriverIf()
+        {
+            var path = _configuration.RemoteDriverPath;
+            if (!path.ExistsEx())
+                return;
+
+            _process = Process.Start(new ProcessStartInfo
+            {
+                FileName = path,
+                RedirectStandardOutput = false,
+                RedirectStandardError = false,
+                UseShellExecute = true,
+            });
+        }
+
+        public void Dispose()
+        {
+            if (_process != null)
+                _process.Kill();
         }
     }
 }
