@@ -9,7 +9,7 @@
 //
 // Need to run Web Driver (Selenium) actions against a page? Using a PageAction allows for DOM
 // manipulation. I'm ensuring that this script is only executed for a given URL.
-// Note: each Page Action needs to be named like "PageAction-*.js" to be automatically read
+// Note: each Page Action needs to be named like "*.js" to be automatically read
 // By Krawlr
 
 if (url.indexOf("auth/login") > -1)

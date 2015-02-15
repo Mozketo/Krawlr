@@ -29,7 +29,7 @@ namespace Krawlr.Core.Services
             if (!Directory.Exists(path))
                 return Enumerable.Empty<string>();
 
-            var result = new DirectoryInfo(path).EnumerateFiles("PageAction-*.js").Select(f =>
+            var result = new DirectoryInfo(path).EnumerateFiles("*.js").Select(f =>
             {
                 return File.ReadAllText(f.FullName);
             });

@@ -36,7 +36,7 @@ After cloning the source and building let's leverage the command-line.
 Page Actions are blocks of javascript code that will executed upon DOM ready of each Selenium Web Driver navigation. 
 Either place your files along side the Krawlr.exe or you can supply a path to scripts using the `--scripts` commandline argument
 
-Note: scripts need to be named `PageAction-*.js` to be parsed and executed.
+Note: scripts need to be named with a javascript extension `*.js` to be parsed and executed.
 
 Take a look at a *sample* or two in the source [repo](src/Krawlr.Console/PageAction-Login.js).
 
