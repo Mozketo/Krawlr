@@ -26,7 +26,7 @@ namespace Krawlr.Core.Services
 
             if (_configuration.OutputPath.HasValue())
             {
-                if (File.Exists(_configuration.OutputPath))
+                if (_configuration.OutputPath.ExistsEx())
                     File.Delete(_configuration.OutputPath);
                 _writer = new StreamWriter(_configuration.OutputPath);
                 _writer.AutoFlush = false;

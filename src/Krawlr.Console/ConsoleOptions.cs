@@ -67,7 +67,7 @@ namespace Krawlr.Core
 
         static Func<string, IEnumerable<string>> readFile = new Func<string, IEnumerable<string>>(path =>
         {
-            var result = path.HasValue() && File.Exists(path)
+            var result = path.ExistsEx()
                 ? File.ReadAllLines(path)
                 : Enumerable.Empty<string>();
             return result;
