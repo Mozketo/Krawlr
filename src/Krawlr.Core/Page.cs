@@ -23,6 +23,7 @@ namespace Krawlr.Core
         public IEnumerable<string> Links()
         {
             var links = Driver.FindElements(By.TagName("a"))
+                .Where(el => el.Enabled)
                 .Select(el =>
                 {
                     try
