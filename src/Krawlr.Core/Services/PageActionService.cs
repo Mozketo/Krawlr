@@ -31,9 +31,12 @@ namespace Krawlr.Core.Services
 
             var result = new DirectoryInfo(path).EnumerateFiles("*.js").Select(f =>
             {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"Reading Page Action {f.FullName}");
+                Console.ResetColor();
                 return File.ReadAllText(f.FullName);
             });
-            return result;
+            return result.ToList();
         })
        .Memoize(threadSafe: true);
 
