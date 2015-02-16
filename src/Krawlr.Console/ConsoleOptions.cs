@@ -15,11 +15,12 @@ namespace Krawlr.Core
 
         public ConsoleConfiguration(string[] args)
         {
-            HasError = !CommandLine.Parser.Default.ParseArguments(args, this);
             FollowPageLinks = true;
             PageScriptsPath = Path.GetDirectoryName(typeof(Application).Assembly.Location);
             WebDriver = "Chrome";
             WebDriverUseFiddlerProxy = true;
+
+            HasError = !CommandLine.Parser.Default.ParseArguments(args, this);
         }
 
         [Option('u', "url", Required = true, HelpText = "URL to start crawling.")]
