@@ -11,13 +11,15 @@ namespace Krawlr.Core
 {
     public class Page
     {
-        public IWebDriver Driver { get; protected set; }
+        protected ILog _log;
 
+        public IWebDriver Driver { get; protected set; }
         public virtual int ReponseCode { get; protected set; }
 
-        public Page(IWebDriver driver)
+        public Page(IWebDriver driver, ILog log)
         {
             Driver = driver;
+            _log = log;
         }
 
         public IEnumerable<string> Links()
@@ -84,21 +86,36 @@ namespace Krawlr.Core
             window.__webdriver_javascript_errors = [];
             return errorList;";
 
-            DateTime endTime = DateTime.Now.Add(timeout);
-            List<string> errorList = new List<string>();
-            IJavaScriptExecutor executor = Driver as IJavaScriptExecutor;
-            var returnedList = executor.ExecuteScript(errorRetrievalScript) as IEnumerable<object>;
+            var endTime = DateTime.Now.Add(timeout);
+            var errorList = new List<string>();
+            var executor = Driver as IJavaScriptExecutor;
+            IEnumerable<object> result;
 
-            while (returnedList == null && DateTime.Now < endTime)
+            try {
+                 result = executor.ExecuteScript(errorRetrievalScript) as IEnumerable<object>;
+            }
+            catch (Exception ex)
             {
-                System.Threading.Thread.Sleep(100);
-                returnedList = executor.ExecuteScript(errorRetrievalScript) as IEnumerable<object>;
+                _log.Error(ex.ToString());
+                return null;
             }
 
-            if (returnedList == null)
+            while (result == null && DateTime.Now < endTime)
+            {
+                try
+                {
+                    result = executor.ExecuteScript(errorRetrievalScript) as IEnumerable<object>;
+                }
+                catch (Exception ex)
+                {
+                    _log.Error(ex.ToString());
+                }
+            }
+
+            if (result == null)
                 return null;
 
-            return returnedList.Select(m => m.ToString());
+            return result.Select(m => m.ToString());
         }
     }
 }
