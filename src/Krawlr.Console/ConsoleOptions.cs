@@ -71,8 +71,9 @@ namespace Krawlr.Core
 
         static Func<string, IEnumerable<string>> readFile = new Func<string, IEnumerable<string>>(path =>
         {
+            // Ignore any lines that start with backticks "`". They're treated as comments
             var result = path.ExistsEx()
-                ? File.ReadAllLines(path)
+                ? File.ReadAllLines(path).Where(l => l.StartsWith("`") == false)
                 : Enumerable.Empty<string>();
             return result;
         })

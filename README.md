@@ -59,6 +59,7 @@ Sample inclusion file
 
 ```
 http://somesite.com
+` This is a comment (backtick)
 http://somesite.com/login
 http://somesite.com/list/something
 ```
@@ -67,5 +68,6 @@ Sample exclusion file
 
 ```
 /logout
+` This is a comment (backtick)
 delete
 ```
