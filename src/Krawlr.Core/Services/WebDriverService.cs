@@ -39,15 +39,17 @@ namespace Krawlr.Core.Services
                 proxy = new OpenQA.Selenium.Proxy { HttpProxy = String.Format("127.0.0.1:{0}", proxyPort) };
             }
 
+            var capabilities = _configuration.WebDriver.EqualsEx("firefox")
+                ? DesiredCapabilities.Firefox()
+                : DesiredCapabilities.Chrome();
+            if (proxy != null)
+                capabilities.SetCapability(CapabilityType.Proxy, proxy);
+
             if (_configuration.WebDriver.EqualsEx("firefox"))
             {
-                return new OpenQA.Selenium.Firefox.FirefoxDriver();
+                return new OpenQA.Selenium.Firefox.FirefoxDriver(capabilities);
             }
-            
-            var capability = DesiredCapabilities.Chrome();
-            if (proxy != null)
-                capability.SetCapability(CapabilityType.Proxy, proxy);
-            return new RemoteWebDriver(new Uri("http://localhost:9515"), capability);
+            return new RemoteWebDriver(new Uri("http://localhost:9515"), capabilities);
         }
 
         protected int StartFiddlerProxy(int desiredPort)
