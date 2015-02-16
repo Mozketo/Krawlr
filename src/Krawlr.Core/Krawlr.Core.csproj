@@ -77,7 +77,7 @@
     <Compile Include="Extensions\StringEx.cs" />
     <Compile Include="Extensions\WebDriverEx.cs" />
     <Compile Include="IConfiguration.cs" />
-    <Compile Include="Logger.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Services\OutputService.cs" />
     <Compile Include="Services\PageActionService.cs" />
     <Compile Include="Page.cs" />
