@@ -29,6 +29,8 @@ After cloning the source and building let's leverage the command-line.
     -w, --webdriver Define WebDriver to use. Firefox, Chrome, Remote (Default: Chrome)
     --webdriver-proxy Using Chrome or Remote should route via Fiddler Core? (Default: true)
     --webdriver-proxy-port If WebDriver proxy is engaged define the port to use. (Default: 0 (autoselect))
+    --remotedriver The path to remote driver (aka ChromeDriver.exe) that should be started before the crawl begins.
+    -s, --silent Run the application without console output.
     -h, --help Display commandline argument help page.
     
 ## Selenium scripts (aka Page Actions)
@@ -48,6 +50,8 @@ By enabling the `--output` commandline argument a crawl history will be written 
 * Page response code (eg 200, 404, 500),
 * If Javascript errors were present on the page,
 * Time taken for the page to load and DOM ready (in milliseconds).
+
+Krawlr will output to CSV file as this is easy to use in spreadsheet application and easy to parse if you wish to extra the data into your own persistent store.
 
 ## Inclusions / Exclusions
 
