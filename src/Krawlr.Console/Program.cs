@@ -10,6 +10,12 @@ namespace Krawlr.Console
 {
     class Program
     {
+        enum ExitCode
+        {
+            Success = 0,
+            InvalidArgs,
+        }
+
         static int Main(string[] args)
         {
             using (var container = new Container())
@@ -17,7 +23,7 @@ namespace Krawlr.Console
                 container.RegisterDelegate<IConfiguration>(r => new ConsoleConfiguration(args), Reuse.Singleton);
                 var configuration = container.Resolve<IConfiguration>();
                 if (configuration.HasError)
-                    return 1;
+                    return (int)ExitCode.InvalidArgs;
                 System.Console.WriteLine($"Starting Krawlr with URL {configuration.BaseUrl}");
 
                 container.Register<IOutputService, OutputService>(Reuse.Singleton);
@@ -40,7 +46,7 @@ namespace Krawlr.Console
                 container.Resolve<Application>().Start();
             }
 
-            return 0;
+            return (int)ExitCode.Success;
         }
     }
 }
