@@ -10,14 +10,14 @@ namespace Krawlr.Console
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             using (var container = new Container())
             {
                 container.RegisterDelegate<IConfiguration>(r => new ConsoleConfiguration(args), Reuse.Singleton);
                 var configuration = container.Resolve<IConfiguration>();
                 if (configuration.HasError)
-                    return;
+                    return 1;
                 System.Console.WriteLine($"Starting Krawlr with URL {configuration.BaseUrl}");
 
                 container.Register<IOutputService, OutputService>(Reuse.Singleton);
@@ -39,6 +39,8 @@ namespace Krawlr.Console
 
                 container.Resolve<Application>().Start();
             }
+
+            return 0;
         }
     }
 }
