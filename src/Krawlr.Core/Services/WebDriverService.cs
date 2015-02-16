@@ -17,11 +17,13 @@ namespace Krawlr.Core.Services
     public class WebDriverService : IWebDriverService
     {
         protected IConfiguration _configuration;
+        protected ILog _log;
         protected Process _process;
 
-        public WebDriverService(IConfiguration configuration)
+        public WebDriverService(IConfiguration configuration, ILog log)
         {
             _configuration = configuration;
+            _log = log;
         }
 
         public IWebDriver Get()
@@ -69,7 +71,7 @@ namespace Krawlr.Core.Services
             if (!path.ExistsEx())
                 return;
 
-            Console.WriteLine($"Starting remote driver from {path}");
+            _log.Info($"Starting remote driver from {path}");
 
             _process = Process.Start(new ProcessStartInfo
             {

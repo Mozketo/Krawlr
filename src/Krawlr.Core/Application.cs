@@ -12,26 +12,27 @@ namespace Krawlr.Core
         protected IConfiguration _configuration;
         protected IPageActionService _pageActionService;
         protected IOutputService _outputService;
+        protected ILog _log;
 
         public Application(Page page,
             IUrlQueueService urlQueueService,
             IConfiguration configuration,
             IPageActionService pageActionService,
-            IOutputService outputService)
+            IOutputService outputService,
+            ILog log)
         {
             _page = page;
             _queueService = urlQueueService;
             _configuration = configuration;
             _pageActionService = pageActionService;
             _outputService = outputService;
+            _log = log;
 
             if (!_configuration.Silent)
             {
                 _queueService.Progress += (sender, args) =>
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine(String.Format("{0} pages remaining", args.Remaining));
-                    Console.ResetColor();
+                    _log.Warn($"{args.Remaining} pages remaining. {args.Count} parsed.");
                 };
             }
         }
@@ -59,12 +60,19 @@ namespace Krawlr.Core
                 _outputService.Write(response);
 
                 // Selenium scripts for this URL
+                timer = System.Diagnostics.Stopwatch.StartNew();
                 _pageActionService.Invoke(response.Url);
+                _log.Debug($"Page action invoke took {timer.ElapsedMilliseconds} ms");
 
                 // Get links
-                var links = _page.Links().Distinct();
+                timer = System.Diagnostics.Stopwatch.StartNew();
+                var links = _page.Links();
+                _log.Debug($"Fetch links took {timer.ElapsedMilliseconds} ms");
+
                 // Process links
-                links.ToList().ForEach(l => _queueService.Add(l));
+                timer = System.Diagnostics.Stopwatch.StartNew();
+                links.Iter(l => _queueService.Add(l));
+                _log.Debug($"Process links took {timer.ElapsedMilliseconds} ms");
             }
         }
     }

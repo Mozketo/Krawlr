@@ -17,12 +17,14 @@ namespace Krawlr.Core.Services
     public class OutputService : IOutputService, IDisposable
     {
         protected IConfiguration _configuration;
+        protected ILog _log;
         protected StreamWriter _writer;
         protected CsvWriter _csv;
 
-        public OutputService(IConfiguration configuration)
+        public OutputService(IConfiguration configuration, ILog log)
         {
             _configuration = configuration;
+            _log = log;
 
             if (_configuration.OutputPath.HasValue())
             {
@@ -40,10 +42,8 @@ namespace Krawlr.Core.Services
         {
             if (!_configuration.Silent)
             {
-                if (response.HasJavscriptErrors)
-                    Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(response.ToString());
-                Console.ResetColor();
+                var color = response.HasJavscriptErrors ? ConsoleColor.Red : ConsoleColor.Gray;
+                _log.WriteLine(response.ToString(), color);
             }
 
             if (_csv == null)

@@ -75,10 +75,10 @@ namespace Krawlr.Core
                 ? File.ReadAllLines(path).Where(l => l.StartsWith("`") == false)
                 : Enumerable.Empty<string>();
 
-            if (path.ExistsEx())
+            if (result.Any())
             {
                 System.Console.ForegroundColor = ConsoleColor.DarkGray;
-                System.Console.WriteLine("Reading file: {path}");
+                System.Console.WriteLine($"Reading file: {path}");
                 System.Console.ResetColor();
             }
 

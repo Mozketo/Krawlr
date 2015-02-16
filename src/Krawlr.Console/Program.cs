@@ -20,11 +20,14 @@ namespace Krawlr.Console
         {
             using (var container = new Container())
             {
+                container.Register<ILog, Log>(Reuse.Singleton);
+                var log = container.Resolve<ILog>();
+
                 container.RegisterDelegate<IConfiguration>(r => new ConsoleConfiguration(args), Reuse.Singleton);
                 var configuration = container.Resolve<IConfiguration>();
                 if (configuration.HasError)
                     return (int)ExitCode.InvalidArgs;
-                System.Console.WriteLine($"Starting Krawlr with URL {configuration.BaseUrl}");
+                log.Info($"Starting Krawlr with URL {configuration.BaseUrl}");
 
                 container.Register<IOutputService, OutputService>(Reuse.Singleton);
                 container.RegisterDelegate<IUrlQueueService>(r =>

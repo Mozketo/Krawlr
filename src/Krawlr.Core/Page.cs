@@ -5,12 +5,12 @@ using Fiddler;
 using System.Text.RegularExpressions;
 using System;
 using System.Linq;
+using HtmlAgilityPack;
 
 namespace Krawlr.Core
 {
     public class Page
     {
-        //IWebDriver _driver;
         public IWebDriver Driver { get; protected set; }
 
         public virtual int ReponseCode { get; protected set; }
@@ -22,23 +22,13 @@ namespace Krawlr.Core
 
         public IEnumerable<string> Links()
         {
-            var links = Driver.FindElements(By.TagName("a"))
-                .Where(el =>
-                {
-                    try
-                    {
-                        return el.Enabled;
-                    }
-                    catch { return false; }
-                })
-                .Select(el =>
-                {
-                    try
-                    {
-                        return el.GetAttribute("href");
-                    }
-                    catch { return null; }
-                });
+            var doc = new HtmlDocument();
+            doc.LoadHtml(Driver.PageSource);
+
+            var links = doc.DocumentNode.SelectNodes("//a")
+                .EmptyIfNull()
+                .Select(p => p.GetAttributeValue("href", String.Empty))
+                .Distinct();
             return links;
         }
 

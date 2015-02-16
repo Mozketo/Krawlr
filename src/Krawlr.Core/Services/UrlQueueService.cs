@@ -33,6 +33,10 @@ namespace Krawlr.Core.Services
 
         public void Add(string url)
         {
+            // If relative URL assume that it's for the current site.
+            if (url.IndexOf('/') == 0)
+                url = $"{_options.BaseUrl.RemoveTrailing('/')}{url}";
+
             if (!url.HasValue() || url.StartsWith(_options.BaseUrl) == false)
                 return;
 
