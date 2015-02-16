@@ -18,6 +18,7 @@ namespace Krawlr.Console
                 var configuration = container.Resolve<IConfiguration>();
                 if (configuration.HasError)
                     return;
+                System.Console.WriteLine($"Starting Krawlr with URL {configuration.BaseUrl}");
 
                 container.Register<IOutputService, OutputService>(Reuse.Singleton);
                 container.RegisterDelegate<IUrlQueueService>(r =>

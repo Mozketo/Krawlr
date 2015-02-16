@@ -14,7 +14,7 @@ namespace Krawlr.Core.Services
         void StartRemoteDriverIf();
     }
 
-    public class WebDriverService : IWebDriverService, IDisposable
+    public class WebDriverService : IWebDriverService
     {
         protected IConfiguration _configuration;
         protected Process _process;
@@ -67,6 +67,8 @@ namespace Krawlr.Core.Services
             if (!path.ExistsEx())
                 return;
 
+            Console.WriteLine($"Starting remote driver from {path}");
+
             _process = Process.Start(new ProcessStartInfo
             {
                 FileName = path,
@@ -74,12 +76,6 @@ namespace Krawlr.Core.Services
                 RedirectStandardError = false,
                 UseShellExecute = true,
             });
-        }
-
-        public void Dispose()
-        {
-            if (_process != null)
-                _process.Kill();
         }
     }
 }
