@@ -8,7 +8,8 @@
         string GetUsage();
 
         string BaseUrl { get; set; }
-        bool FollowPageLinks { get; set; }
+        string FollowPageLinks { get; set; }
+        bool ShouldFollowPageLinks { get; }
         bool Silent { get; set; }
         int MaxPageLinksToFollow { get; set; }
         string PageScriptsPath { get; set; }

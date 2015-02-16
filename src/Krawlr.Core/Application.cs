@@ -65,14 +65,17 @@ namespace Krawlr.Core
                 _log.Debug($"Page action invoke took {timer.ElapsedMilliseconds} ms");
 
                 // Get links
-                timer = System.Diagnostics.Stopwatch.StartNew();
-                var links = _page.Links();
-                _log.Debug($"Fetch links took {timer.ElapsedMilliseconds} ms");
+                if (_configuration.ShouldFollowPageLinks)
+                {
+                    timer = System.Diagnostics.Stopwatch.StartNew();
+                    var links = _page.Links();
+                    _log.Debug($"Fetch links took {timer.ElapsedMilliseconds} ms");
 
-                // Process links
-                timer = System.Diagnostics.Stopwatch.StartNew();
-                links.Iter(l => _queueService.Add(l));
-                _log.Debug($"Process links took {timer.ElapsedMilliseconds} ms");
+                    // Process links
+                    timer = System.Diagnostics.Stopwatch.StartNew();
+                    links.Iter(l => _queueService.Add(l));
+                    _log.Debug($"Process links took {timer.ElapsedMilliseconds} ms");
+                }
             }
         }
     }

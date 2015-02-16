@@ -12,7 +12,7 @@ After cloning the source and building let's leverage the command-line.
     $ Krawlr.exe --url http://global.clsnightly.test.janison.com --exclusions ExcludeUrls.txt
     
     // Krawlr can follow a preset list of routes to follow
-    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --inclusions Routes.txt --follow-links=false
+    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --inclusions Routes.txt --follow-links no
     
     // Need to login to a page? It's possible to manipulate the DOM with Page Actions (more below)
     $ Krawlr.exe --url http://global.clsnightly.test.janison.com --scripts Path\to\scripts
@@ -20,7 +20,7 @@ After cloning the source and building let's leverage the command-line.
 ## Arguments
 
     -u, --url Required. URL to start crawling.
-    -f, --follow-links If true after the page is ready it will be checked for all a href links and be added to the queue of pages to load. (Default: true)
+    -f, --follow-links (yes/no) If true after the page is ready it will be checked for all a href links and be added to the queue of pages to load. (Default: true)
     --max-follow-links Limit the number of pages to crawl. Default: 0 (no limit)
     -e, --exclusions Path to a file with list of routes/keywords in URL to bypass.
     -i, --inclusions Path to a file with a hard list of routes to hit (will follow in order). Use with --follow=false

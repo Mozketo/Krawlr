@@ -14,7 +14,7 @@ namespace Krawlr.Core
 
         public ConsoleConfiguration(string[] args)
         {
-            FollowPageLinks = true;
+            FollowPageLinks = "yes";
             PageScriptsPath = Path.GetDirectoryName(typeof(Application).Assembly.Location);
             WebDriver = "Chrome";
             WebDriverUseFiddlerProxy = true;
@@ -29,7 +29,8 @@ namespace Krawlr.Core
         public bool Silent { get; set; }
 
         [Option('f', "follow-links", Required = false, HelpText = "After loading a page should links on the page be followed? (Default: true)")]
-        public bool FollowPageLinks { get; set; }
+        public string FollowPageLinks { get; set; }
+        public bool ShouldFollowPageLinks {  get { return FollowPageLinks.Equals(String.Empty) || FollowPageLinks.EqualsEx("yes"); } }
 
         [Option("max-follow-links", Required = false, HelpText = "Limit the number of pages to crawl. Default: 0 (no limit)")]
         public int MaxPageLinksToFollow { get; set; }

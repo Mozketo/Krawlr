@@ -2,7 +2,7 @@
 {
     using System;
     using System.Linq;
-    using System.Collections.Generic;    
+    using System.Collections.Generic;
 
     public class Response
     {
@@ -11,6 +11,13 @@
         public IEnumerable<string> JavascriptErrors { get; set; }
         public bool HasJavscriptErrors { get { return JavascriptErrors.Any(); } }
         public decimal TimeTakenMs { get; set; }
+        public string LoggableJavascriptErrors
+        {
+            get
+            {
+                return String.Join("\n", JavascriptErrors);
+            }
+        }
 
         public override string ToString()
         {
