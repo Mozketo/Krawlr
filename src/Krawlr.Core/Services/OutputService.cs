@@ -39,7 +39,12 @@ namespace Krawlr.Core.Services
         public void Write(Response response)
         {
             if (!_configuration.Silent)
+            {
+                if (response.HasJavscriptErrors)
+                    Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(response.ToString());
+                Console.ResetColor();
+            }
 
             if (_csv == null)
                 return;

@@ -2,10 +2,9 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Text;
 using Krawlr.Core.Extensions;
-using System.Linq;
 using CommandLine.Text;
+using System.Linq;
 
 namespace Krawlr.Core
 {
@@ -75,6 +74,14 @@ namespace Krawlr.Core
             var result = path.ExistsEx()
                 ? File.ReadAllLines(path).Where(l => l.StartsWith("`") == false)
                 : Enumerable.Empty<string>();
+
+            if (path.ExistsEx())
+            {
+                System.Console.ForegroundColor = ConsoleColor.DarkGray;
+                System.Console.WriteLine("Reading file: {path}");
+                System.Console.ResetColor();
+            }
+
             return result;
         })
         .Memoize(threadSafe: true);
