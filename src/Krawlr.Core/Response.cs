@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Collections.Generic;
+    using Krawlr.Core.Extensions;
 
     public class Response
     {
@@ -15,7 +16,7 @@
         public string Url { get; set; }
         public int Code { get; set; }
         public IEnumerable<string> JavascriptErrors { get; set; }
-        public bool HasJavscriptErrors { get { return JavascriptErrors.Any(); } }
+        public bool HasJavscriptErrors { get { return JavascriptErrors.EmptyIfNull().Any(); } }
         public decimal TimeTakenMs { get; set; }
         public string LoggableJavascriptErrors
         {
