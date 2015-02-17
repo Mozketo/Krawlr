@@ -27,7 +27,7 @@
 
         public override string ToString()
         {
-            return $"Navigating in {TimeTakenMs} ms to {Url} with status code of {Code}. JS Errors? {HasJavscriptErrors}";
+            return $"{Url} took {TimeTakenMs} ms with status code of {Code}. JS Errors? {HasJavscriptErrors}";
         }
     }
 }

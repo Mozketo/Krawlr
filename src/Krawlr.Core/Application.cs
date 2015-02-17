@@ -46,6 +46,7 @@ namespace Krawlr.Core
             while (_queueService.TryDequeue(out url))
             {
                 var response = new Response { Url = url };
+                _log.Debug($"Navigate starting to {url}");
                 var timer = System.Diagnostics.Stopwatch.StartNew();
 
                 // Load
