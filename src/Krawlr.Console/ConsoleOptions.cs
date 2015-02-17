@@ -15,6 +15,7 @@ namespace Krawlr.Core
         public ConsoleConfiguration(string[] args)
         {
             FollowPageLinks = "yes";
+            IgnoreGuid = "yes";
             PageScriptsPath = Path.GetDirectoryName(typeof(Application).Assembly.Location);
             WebDriver = "Chrome";
             WebDriverUseFiddlerProxy = true;
@@ -31,6 +32,10 @@ namespace Krawlr.Core
         [Option('f', "follow-links", Required = false, HelpText = "After loading a page should links on the page be followed? (Default: true)")]
         public string FollowPageLinks { get; set; }
         public bool ShouldFollowPageLinks {  get { return FollowPageLinks.Equals(String.Empty) || FollowPageLinks.EqualsEx("yes"); } }
+
+        [Option("ignore-guids", Required = false, HelpText = "When analysing URLs remove guids as this removes repeat crawling like /items/item/{guid}. Value is yes / no (Default: yes)")]
+        public string IgnoreGuid { get; set; }
+        public bool IgnoreGuids { get { return IgnoreGuid.Equals(String.Empty) || IgnoreGuid.EqualsEx("yes"); } }
 
         [Option("max-follow-links", Required = false, HelpText = "Limit the number of pages to crawl. Default: 0 (no limit)")]
         public int MaxPageLinksToFollow { get; set; }

@@ -19,6 +19,8 @@ namespace Krawlr.Core.Services
 
     public class UrlQueueService : IUrlQueueService
     {
+        const string _guid = "guid";
+
         static ConcurrentQueue<string> Queue = new ConcurrentQueue<string>();
         static HashSet<string> List = new HashSet<string>();
 
@@ -42,6 +44,19 @@ namespace Krawlr.Core.Services
 
             var uri = new Uri(url);
             var path = $"{uri.LocalPath}{uri.Fragment}".RemoveTrailing('#').RemoveTrailing('/');
+
+            // Experimental, deconstruct the URL, remove GUIDs, reconstruct URL.
+            // In this scenario it would be required to treat the URL as /route/{guid} yet be stored for lookup
+            // as /route/guid so that later matches are made against a common string. It's getting messy
+            // As an efficency step only do this for URLs that contain numbers, chances these are IDs
+            if (_options.IgnoreGuids && path.Any(char.IsDigit))
+            {
+                path = String.Join("/", path.Split('/').Select(p =>
+                {
+                    Guid guid;
+                    return Guid.TryParse(p, out guid) ? _guid : p;
+                }));
+            }
 
             if (List.Contains(path)) // TODO: Lock?
                 return;

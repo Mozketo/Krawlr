@@ -30,6 +30,7 @@ After cloning the source and building let's leverage the command-line.
     --webdriver-proxy Using Chrome or Remote should route via Fiddler Core? (Default: true)
     --webdriver-proxy-port If WebDriver proxy is engaged define the port to use. (Default: 0 (autoselect))
     -s, --silent Run the application without console output.
+    --ignore-guids When analysing URLs remove guids as this removes repeat crawling of URLs like /items/item/{guid}. (Default: yes)
     -h, --help Display commandline argument help page.
     
 ## Selenium scripts (aka Page Actions)

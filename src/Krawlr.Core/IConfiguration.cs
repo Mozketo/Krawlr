@@ -10,7 +10,8 @@
         string BaseUrl { get; set; }
         string FollowPageLinks { get; set; }
         bool ShouldFollowPageLinks { get; }
-        bool Silent { get; set; }
+        bool Silent { get; }
+        bool IgnoreGuids { get; }
         int MaxPageLinksToFollow { get; set; }
         string PageScriptsPath { get; set; }
         string ExclusionsFilePath { get; set; }
