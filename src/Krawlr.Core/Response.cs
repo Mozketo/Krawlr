@@ -6,6 +6,12 @@
 
     public class Response
     {
+        public Response()
+        {
+            Created = DateTime.Now; // Use local time as opposed to UTC.
+        }
+
+        public DateTime Created { get; protected set; }
         public string Url { get; set; }
         public int Code { get; set; }
         public IEnumerable<string> JavascriptErrors { get; set; }
