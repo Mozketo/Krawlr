@@ -47,9 +47,6 @@ namespace Krawlr.Core
         [Option('o', "output", Required = false, HelpText = "Write crawling activity to CSV file with path...")]
         public string OutputPath { get; set; }
 
-        [Option("remotedriver", Required = false, HelpText = "Path to Remote Driver (aka ChromeDriver.exe). Process will be spawned on application start. (Required: If using Chrome)")]
-        public string RemoteDriverPath { get; set; }
-
         public IEnumerable<string> Exclusions { get { return readFile(ExclusionsFilePath); } }
         public IEnumerable<string> Inclusions { get { return readFile(InclusionsFilePath); } }
 

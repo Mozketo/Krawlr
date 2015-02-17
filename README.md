@@ -29,7 +29,6 @@ After cloning the source and building let's leverage the command-line.
     -w, --webdriver Define WebDriver to use. Firefox, Chrome, Remote (Default: Chrome)
     --webdriver-proxy Using Chrome or Remote should route via Fiddler Core? (Default: true)
     --webdriver-proxy-port If WebDriver proxy is engaged define the port to use. (Default: 0 (autoselect))
-    --remotedriver The path to remote driver (aka ChromeDriver.exe) that should be started before the crawl begins.
     -s, --silent Run the application without console output.
     -h, --help Display commandline argument help page.
     

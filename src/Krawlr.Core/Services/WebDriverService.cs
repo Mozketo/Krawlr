@@ -11,7 +11,6 @@ namespace Krawlr.Core.Services
     public interface IWebDriverService
     {
         IWebDriver Get();
-        void StartRemoteDriverIf();
     }
 
     public class WebDriverService : IWebDriverService
@@ -65,21 +64,21 @@ namespace Krawlr.Core.Services
             return proxyPort;
         }
 
-        public void StartRemoteDriverIf()
-        {
-            var path = _configuration.RemoteDriverPath;
-            if (!path.ExistsEx())
-                return;
+        //public void StartRemoteDriverIf()
+        //{
+        //    var path = _configuration.RemoteDriverPath;
+        //    if (!path.ExistsEx())
+        //        return;
 
-            _log.Info($"Starting remote driver from {path}");
+        //    _log.Info($"Starting remote driver from {path}");
 
-            _process = Process.Start(new ProcessStartInfo
-            {
-                FileName = path,
-                RedirectStandardOutput = false,
-                RedirectStandardError = false,
-                UseShellExecute = true,
-            });
-        }
+        //    _process = Process.Start(new ProcessStartInfo
+        //    {
+        //        FileName = path,
+        //        RedirectStandardOutput = false,
+        //        RedirectStandardError = false,
+        //        UseShellExecute = true,
+        //    });
+        //}
     }
 }

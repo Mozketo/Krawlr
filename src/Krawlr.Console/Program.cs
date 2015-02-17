@@ -39,9 +39,6 @@ namespace Krawlr.Console
                 container.Register<Page, Page>();
                 container.Register<Application, Application>(Reuse.Singleton);
 
-                var webServiceDriver = container.Resolve<IWebDriverService>();
-                webServiceDriver.StartRemoteDriverIf();
-
                 var queueService = container.Resolve<IUrlQueueService>();
                 queueService.Add(configuration.BaseUrl);
 
