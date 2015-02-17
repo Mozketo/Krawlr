@@ -30,8 +30,7 @@ namespace Krawlr.Console
                 log.Info($"Starting Krawlr with URL {configuration.BaseUrl}");
 
                 container.Register<IOutputService, OutputService>(Reuse.Singleton);
-                container.RegisterDelegate<IUrlQueueService>(r =>
-                    new UrlQueueService(r.Resolve<IConfiguration>()), Reuse.Singleton);
+                container.Register<IUrlQueueService, UrlQueueService>(Reuse.Singleton);
 
                 container.Register<IWebDriverService, WebDriverService>();
                 container.RegisterDelegate<IWebDriver>(r => r.Resolve<IWebDriverService>().Get(), Reuse.Singleton);
