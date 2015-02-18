@@ -1,11 +1,8 @@
 ﻿using CsvHelper;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Krawlr.Core.Extensions;
+using MZMemoize.Extensions;
 
 namespace Krawlr.Core.Services
 {

@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using Krawlr.Core.Extensions;
 using System.Diagnostics;
+using MZMemoize.Extensions;
 
 namespace Krawlr.Core.Services
 {

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Krawlr.Core.Extensions;
 using System.IO;
 using Jint;
 using OpenQA.Selenium;
+using MZMemoize;
+using MZMemoize.Extensions;
 
 namespace Krawlr.Core.Services
 {

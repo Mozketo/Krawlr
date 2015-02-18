@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using Krawlr.Core.Extensions;
 using CommandLine.Text;
 using System.Linq;
+using MZMemoize;
+using MZMemoize.Extensions;
 
 namespace Krawlr.Core
 {

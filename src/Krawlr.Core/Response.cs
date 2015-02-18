@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
     using System.Collections.Generic;
-    using Krawlr.Core.Extensions;
+    using MZMemoize.Extensions;
 
     public class Response
     {

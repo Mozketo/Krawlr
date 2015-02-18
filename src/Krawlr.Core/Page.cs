@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System;
 using System.Linq;
 using HtmlAgilityPack;
+using MZMemoize.Extensions;
 
 namespace Krawlr.Core
 {
