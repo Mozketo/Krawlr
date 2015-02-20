@@ -7,6 +7,12 @@
         bool HasError { get; }
         string GetUsage();
 
+        // Extra information stating if running in Client / Server mode, and if so
+        // which config settings to use
+        bool Distributed { get; set; }
+        bool Server { get; set; }
+        bool Client { get; set; }
+
         string BaseUrl { get; set; }
         string FollowPageLinks { get; set; }
         bool ShouldFollowPageLinks { get; }

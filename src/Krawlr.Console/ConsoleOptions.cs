@@ -16,14 +16,24 @@ namespace Krawlr.Core
 
         public ConsoleConfiguration(string[] args)
         {
+            Distributed = false;
+            Client = true;
+            Server = true;
+
             FollowPageLinks = "yes";
             IgnoreGuid = "yes";
-            PageScriptsPath = Path.GetDirectoryName(typeof(Application).Assembly.Location);
+            PageScriptsPath = Path.GetDirectoryName(typeof(IConfiguration).Assembly.Location);
             WebDriver = "Chrome";
             WebDriverUseFiddlerProxy = true;
 
             HasError = !CommandLine.Parser.Default.ParseArguments(args, this);
         }
+
+        
+        public bool Distributed { get; set; }
+        public bool Client { get; set; }
+
+        public bool Server { get; set; }
 
         [Option('u', "url", Required = true, HelpText = "URL to start crawling.")]
         public string BaseUrl { get; set; }

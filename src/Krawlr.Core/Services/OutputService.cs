@@ -6,19 +6,19 @@ using MZMemoize.Extensions;
 
 namespace Krawlr.Core.Services
 {
-    public interface IOutputService// : IDisposable
+    public interface IWriterService// : IDisposable
     {
         void Write(Response response);
     }
 
-    public class OutputService : IOutputService, IDisposable
+    public class WriterService : IWriterService, IDisposable
     {
         protected IConfiguration _configuration;
         protected ILog _log;
         protected StreamWriter _writer;
         protected CsvWriter _csv;
 
-        public OutputService(IConfiguration configuration, ILog log)
+        public WriterService(IConfiguration configuration, ILog log)
         {
             _configuration = configuration;
             _log = log;

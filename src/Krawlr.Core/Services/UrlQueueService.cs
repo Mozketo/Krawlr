@@ -2,8 +2,11 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Krawlr.Core.Extensions;
 using MZMemoize.Extensions;
+using ServiceStack.Messaging;
+using Krawlr.Core.Extensions;
+using Krawlr.Core.DTO;
+using ServiceStack;
 
 namespace Krawlr.Core.Services
 {
@@ -11,6 +14,7 @@ namespace Krawlr.Core.Services
     {
         event ProgressEventHandler Progress;
         void Add(string url);
+        void Add(IEnumerable<string> urls);
         bool TryDequeue(out string url);
         bool TryPeek(out string url);
         bool Peek();
@@ -25,11 +29,15 @@ namespace Krawlr.Core.Services
 
         public event ProgressEventHandler Progress;
 
-        IConfiguration _options;
+        protected IConfiguration _options;
+        protected IMessageService _mQServer;
+        protected IWriterService _writer;
 
-        public UrlQueueService(IConfiguration options)
+        public UrlQueueService(IConfiguration options, IMessageService messageService, IWriterService writer)
         {
             _options = options;
+            _mQServer = messageService;
+            _writer = writer;
         }
 
         public void Add(string url)
@@ -70,7 +78,32 @@ namespace Krawlr.Core.Services
                 return;
 
             List.Add(path); // TODO: Add Lock?
-            Queue.Enqueue(url);
+            //Queue.Enqueue(url);
+            Publish(url);
+        }
+
+        public void Add(IEnumerable<string> urls)
+        {
+            urls.Iter(url => Add(url));
+        }
+
+        protected void Publish(string url)
+        {
+            using (var mqClient = _mQServer.CreateMessageQueueClient())
+            {
+                mqClient.Publish(new Url { Path = url, });
+
+                // Now wait for the response
+                IMessage<UrlResponse> responseMsg = mqClient.Get<UrlResponse>(QueueNames<UrlResponse>.In, TimeSpan.FromSeconds(90));
+                mqClient.Ack(responseMsg);
+                var response = responseMsg.GetBody();
+
+                // Log response
+                _writer.Write(response.Response);
+
+                // Parse for new links
+                Add(response.Links);
+            }
         }
 
         public bool TryDequeue(out string url)
