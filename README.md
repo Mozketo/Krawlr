@@ -19,20 +19,21 @@ After cloning the source and building let's leverage the command-line.
 
 ## Arguments
 
-    -u, --url Required. URL to start crawling.
-    -f, --follow-links (yes/no) If true after the page is ready it will be checked for all a href links and be added to the queue of pages to load. (Default: true)
-    --max-follow-links Limit the number of pages to crawl. Default: 0 (no limit)
-    -e, --exclusions Path to a file with list of routes/keywords in URL to bypass.
-    -i, --inclusions Path to a file with a hard list of routes to hit (will follow in order). Use with --follow=false
-    -o, --output Write crawling activity to CSV file with path. Including URL, response code, javascript errors, time taken. (Some features require FiddleCore proxy enabled).
-    -s, --scripts After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.
-    -w, --webdriver Define WebDriver to use. Firefox, Chrome, Remote (Default: Chrome)
-    --webdriver-proxy Using Chrome or Remote should route via Fiddler Core? (Default: true)
+    -u, --url=VALUE        Starting URL to begin crawling.
+    -q, --quiet            Run quietly with less detailed console logging
+    --no-follow-links      After loading a page don't find and follow links on the page
+    --ignore-guids         When analysing URLs remove guids as this removes repeat crawling like /items/item/guid. Value is yes / no (Default: yes) 
+    --max-follow-links=VALUE Limit the number of pages to crawl. Default: 0 (no limit).
+    -e, --exclude=VALUE    Path to a file with list of routes/keywords in URL to bypass.
+    -i, --include=VALUE    Path to a file with a hard list of routes to hit (will follow in order). Use with --no-follow-links false.
+    -s, --scripts=VALUE    After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.
+    -o, --output=VALUE     Write crawling activity to CSV file with path...
+    -w, --webdriver=VALUE  Define WebDriver to use. Firefox, Chrome, Remote (Default: Firefox)
+    --webdriver-proxy      Using Chrome or Remote should route via FiddlerCore?
     --webdriver-proxy-port If WebDriver proxy is engaged define the port to use. (Default: 0 (autoselect))
-    -s, --silent Run the application without console output.
-    --ignore-guids When analysing URLs remove guids as this removes repeat crawling of URLs like /items/item/{guid}. (Default: yes)
-    -h, --help Display commandline argument help page.
-    
+    --mode=VALUE           Disibution mode use to use: clientserver, server, client (if server & client a running RabbitMQ server is required)
+    -h, -?, --help             Show this message and exit.
+
 ## Selenium scripts (aka Page Actions)
 
 Page Actions are blocks of javascript code that will executed upon DOM ready of each Selenium Web Driver navigation. 
@@ -71,3 +72,6 @@ Sample exclusion file
 ` This is a comment (backtick)
 delete
 ```
+
+Install Erlang,
+Install RabbitMq Server

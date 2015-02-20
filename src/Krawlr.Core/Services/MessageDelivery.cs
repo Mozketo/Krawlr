@@ -19,8 +19,7 @@ namespace Krawlr.Core.Services
 
         public IMessageService Instance(int retryCount = 1)
         {
-            if (_configuration.Distributed)
-            //if (true) // Hardcode on as in memory doesn't work at the moment.
+            if (_configuration.DistributionMode == DistributionMode.Server || _configuration.DistributionMode == DistributionMode.Client)
                 return new RabbitMqServer { RetryCount = retryCount };
             return new InMemoryTransientMessageService { RetryCount = retryCount };
         }

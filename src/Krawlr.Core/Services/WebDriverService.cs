@@ -30,24 +30,24 @@ namespace Krawlr.Core.Services
         {
             OpenQA.Selenium.Proxy proxy = null;
 
-            if (_configuration.WebDriverUseFiddlerProxy)
+            if (_configuration.WebDriver.UseFiddlerProxy)
             {
                 // Note that we're using a port of 0, which tells Fiddler to
                 // select a random available port to listen on.
-                int proxyPort = StartFiddlerProxy(_configuration.WebDriverFiddlerProxyPort);
+                int proxyPort = StartFiddlerProxy(_configuration.WebDriver.FiddlerProxyPort);
 
                 // We are only proxying HTTP traffic, but could just as easily
                 // proxy HTTPS or FTP traffic.
                 proxy = new OpenQA.Selenium.Proxy { HttpProxy = String.Format("127.0.0.1:{0}", proxyPort) };
             }
 
-            var capabilities = _configuration.WebDriver.EqualsEx("firefox")
+            var capabilities = _configuration.WebDriver.Driver.EqualsEx("firefox")
                 ? DesiredCapabilities.Firefox()
                 : DesiredCapabilities.Chrome();
             if (proxy != null)
                 capabilities.SetCapability(CapabilityType.Proxy, proxy);
 
-            if (_configuration.WebDriver.EqualsEx("firefox"))
+            if (_configuration.WebDriver.Driver.EqualsEx("firefox"))
             {
                 return new OpenQA.Selenium.Firefox.FirefoxDriver(capabilities);
             }

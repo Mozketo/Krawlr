@@ -37,7 +37,7 @@ namespace Krawlr.Core.Services
 
         public void Write(Response response)
         {
-            if (!_configuration.Silent)
+            if (!_configuration.Quiet)
             {
                 var color = response.HasJavscriptErrors ? ConsoleColor.Red : ConsoleColor.Gray;
                 _log.WriteLine(response.ToString(), color);

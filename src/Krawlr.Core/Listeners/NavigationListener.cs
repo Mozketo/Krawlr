@@ -48,7 +48,7 @@
                 _actionService.Invoke(response.Url);
 
                 // Get links
-                if (_configuration.ShouldFollowPageLinks)
+                if (_configuration.FollowPageLinks)
                 {
                     timer = System.Diagnostics.Stopwatch.StartNew();
                     var links = _page.Links();

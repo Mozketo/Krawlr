@@ -38,12 +38,8 @@ namespace Krawlr.Console
 
                 container.Register<IWebDriverService, WebDriverService>();
                 container.RegisterDelegate(r => r.Resolve<IWebDriverService>().Get(), Reuse.Singleton);
-
-                //var mqServer = container.Resolve<IMessageService>();
-
                 container.Register<IPageActionService, PageActionService>(Reuse.Singleton);
                 container.Register<Page, Page>();
-                //container.Register<Application, Application>(Reuse.Singleton);
 
                 container.Register<IMessageQueueServer, MessageQueueServer>();
                 container.RegisterDelegate<IMessageService>(r => r.Resolve<IMessageQueueServer>().Instance(), Reuse.Singleton);

@@ -1,12 +1,11 @@
-﻿using CommandLine;
-using System;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 using Krawlr.Core.Extensions;
-using CommandLine.Text;
 using System.Linq;
 using MZMemoize;
 using MZMemoize.Extensions;
+using NDesk.Options;
 
 namespace Krawlr.Core
 {
@@ -16,71 +15,99 @@ namespace Krawlr.Core
 
         public ConsoleConfiguration(string[] args)
         {
-            Distributed = false;
-            Client = true;
-            Server = true;
+            DistributionMode = DistributionMode.ClientServer;
 
-            FollowPageLinks = "yes";
-            IgnoreGuid = "yes";
+            FollowPageLinks = true;
+            IgnoreGuids = true;
             PageScriptsPath = Path.GetDirectoryName(typeof(IConfiguration).Assembly.Location);
-            WebDriver = "Chrome";
-            WebDriverUseFiddlerProxy = true;
 
-            HasError = !CommandLine.Parser.Default.ParseArguments(args, this);
+            Parse(args);
         }
 
-        
-        public bool Distributed { get; set; }
-        public bool Client { get; set; }
+        protected void Parse(string[] args)
+        {
+            this.WebDriver = new ConfigurationWebDriver();
 
-        public bool Server { get; set; }
+            bool showHelp = false;
+            var optionSet = new OptionSet
+            {
+                { "u|url=", "Starting URL to begin crawling.", v => BaseUrl = v },
 
-        [Option('u', "url", Required = true, HelpText = "URL to start crawling.")]
-        public string BaseUrl { get; set; }
+                // easy config
+                { "q|quiet", "Run quietly with less detailed console logging.", v => Quiet = v != null },
+                { "no-follow-links", "After loading a page don't find and follow links on the page", v => FollowPageLinks = v != null },
+                { "ignore-guids", "When analysing URLs remove guids as this removes repeat crawling like /items/item/{guid}. Value is yes / no (Default: yes)", v => IgnoreGuids = v != null },
+                { "max-follow-links=", "Limit the number of pages to crawl. Default: 0 (no limit).", v => MaxPageLinksToFollow = int.Parse(v) },
 
-        [Option('s', "silent", Required = true, HelpText = "URL to start crawling. (Default: false)")]
-        public bool Silent { get; set; }
+                // Paths
+                { "e|exclude=", "Path to a file with list of routes/keywords in URL to bypass.", v => ExclusionsFilePath = v },
+                { "i|include=", "Path to a file with a hard list of routes to hit (will follow in order). Use with --no-follow-links false.", v => InclusionsFilePath = v },
+                { "s|scripts=", "After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.", v => PageScriptsPath = v },
+                { "o|output=", "Write crawling activity to CSV file with path...", v => OutputPath = v },
 
-        [Option('f', "follow-links", Required = false, HelpText = "After loading a page should links on the page be followed? (Default: true)")]
-        public string FollowPageLinks { get; set; }
-        public bool ShouldFollowPageLinks {  get { return FollowPageLinks.Equals(String.Empty) || FollowPageLinks.EqualsEx("yes"); } }
+                // Webdriver
+                { "w|webdriver=", "Define WebDriver to use. Firefox, Chrome, Remote (Default: Firefox)", v => WebDriver.Driver = v },
+                { "webdriver-proxy", "Using Chrome or Remote should route via Fiddler Core?", v => WebDriver.UseFiddlerProxy = v != null },
+                { "webdriver-proxy-port", "If WebDriver proxy is engaged define the port to use. (Default: 0 (autoselect))", v => WebDriver.FiddlerProxyPort = int.Parse(v) },
 
-        [Option("ignore-guids", Required = false, HelpText = "When analysing URLs remove guids as this removes repeat crawling like /items/item/{guid}. Value is yes / no (Default: yes)")]
-        public string IgnoreGuid { get; set; }
-        public bool IgnoreGuids { get { return IgnoreGuid.Equals(String.Empty) || IgnoreGuid.EqualsEx("yes"); } }
+                // Mode
+                { "mode=", "Disibution mode use to use: clientserver, server, client (if server & client a running RabbitMQ server is required)", v => DistributionMode = (DistributionMode)Enum.Parse(typeof(DistributionMode), v, true) },
 
-        [Option("max-follow-links", Required = false, HelpText = "Limit the number of pages to crawl. Default: 0 (no limit)")]
-        public int MaxPageLinksToFollow { get; set; }
+                { "h|?|help", "Show this message and exit.", v => showHelp = v != null },
+            };
+            List<string> extra = optionSet.Parse(args);
 
-        [Option('e', "exclusions", Required = false, HelpText = "Path to a file with list of routes/keywords in URL to bypass.")]
-        public string ExclusionsFilePath { get; set; }
+            if (!BaseUrl.HasValue())
+            {
+                System.Console.WriteLine("BaseUrl is a required commandline argument to run the app.");
+                HasError = true;
+            }
 
-        [Option('i', "inclusions", Required = false, HelpText = "Path to a file with a hard list of routes to hit (will follow in order). Use with --follow-links false")]
-        public string InclusionsFilePath { get; set; }
+            if (extra.Any())
+            {
+                HasError = true;
+                System.Console.WriteLine($"The following options are being ignored: {String.Join(", ", extra)}");
+            }
 
-        [Option('s', "scripts", Required = false, HelpText = "After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.")]
-        public string PageScriptsPath { get; set; }
+            if (showHelp || HasError)
+            {
+                HasError = true;
+                optionSet.WriteOptionDescriptions(System.Console.Out);
+            }
+        }
 
-        [Option('o', "output", Required = false, HelpText = "Write crawling activity to CSV file with path...")]
-        public string OutputPath { get; set; }
+        public string BaseUrl { get; protected set; }
+
+        public bool Quiet { get; protected set; }
+        public bool FollowPageLinks { get; protected set; }
+        public bool IgnoreGuids { get; protected set; }
+        public int MaxPageLinksToFollow { get; protected set; }
+
+        public string ExclusionsFilePath { get; protected set; }
+        public string InclusionsFilePath { get; protected set; }
+        public string PageScriptsPath { get; protected set; }
+        public string OutputPath { get; protected set; }
 
         public IEnumerable<string> Exclusions { get { return readFile(ExclusionsFilePath); } }
         public IEnumerable<string> Inclusions { get { return readFile(InclusionsFilePath); } }
 
         // WebDriver configuration and Fiddler proxy
-        [Option('w', "webdriver", Required = false, HelpText = "Define WebDriver to use. Firefox, Chrome, Remote (Default: Chrome)")]
-        public string WebDriver { get; set; }
-        [Option("webdriver-proxy", Required = false, HelpText = "Using Chrome or Remote should route via Fiddler Core? (Default: true) ")]
-        public bool WebDriverUseFiddlerProxy { get; set; }
-        [Option("webdriver-proxy-port", Required = false, HelpText = "If WebDriver proxy is engaged define the port to use. (Default: 0 (autoselect))")]
-        public int WebDriverFiddlerProxyPort { get; set; }
+        public IConfigurationWebDriver WebDriver { get; set; }
 
-        [HelpOption]
-        public string GetUsage()
+        // Mode - such as distributed & client and server
+        public DistributionMode DistributionMode { get; protected set; }
+
+        public class ConfigurationWebDriver : IConfigurationWebDriver
         {
-            var help = HelpText.AutoBuild(this);
-            help.Copyright = "Copyright 2015 Ben Clark-Robinson";
-            return help.ToString();
+            public ConfigurationWebDriver()
+            {
+                Driver = "Firefox";
+                UseFiddlerProxy = true;
+            }
+
+            public string Driver { get; set; }
+            public int FiddlerProxyPort { get; set; }
+            public bool UseFiddlerProxy { get; set; }
         }
 
         static Func<string, IEnumerable<string>> readFile = new Func<string, IEnumerable<string>>(path =>

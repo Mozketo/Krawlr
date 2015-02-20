@@ -2,33 +2,41 @@
 {
     using System.Collections.Generic;
 
+    public enum DistributionMode
+    {
+        ClientServer = 0,
+        Server,
+        Client
+    }
+
     public interface IConfiguration
     {
         bool HasError { get; }
-        string GetUsage();
 
         // Extra information stating if running in Client / Server mode, and if so
         // which config settings to use
-        bool Distributed { get; set; }
-        bool Server { get; set; }
-        bool Client { get; set; }
+        DistributionMode DistributionMode { get; }
 
-        string BaseUrl { get; set; }
-        string FollowPageLinks { get; set; }
-        bool ShouldFollowPageLinks { get; }
-        bool Silent { get; }
+        string BaseUrl { get; }
+        bool FollowPageLinks { get; }
+        bool Quiet { get; }
         bool IgnoreGuids { get; }
-        int MaxPageLinksToFollow { get; set; }
-        string PageScriptsPath { get; set; }
-        string ExclusionsFilePath { get; set; }
-        string InclusionsFilePath { get; set; }
+        int MaxPageLinksToFollow { get; }
+        string PageScriptsPath { get; }
+        string ExclusionsFilePath { get; }
+        string InclusionsFilePath { get; }
         IEnumerable<string> Exclusions { get; }
         IEnumerable<string> Inclusions { get; }
-        string OutputPath { get; set; }
+        string OutputPath { get; }
 
         // Configuration settings for WebDriver
-        string WebDriver { get; set; } // Chrome, Firefox...
-        bool WebDriverUseFiddlerProxy { get; set; }
-        int WebDriverFiddlerProxyPort { get; set; }
+        IConfigurationWebDriver WebDriver { get; set; }
+    }
+
+    public interface IConfigurationWebDriver
+    {
+        string Driver { get; set; } // Chrome, Firefox...
+        bool UseFiddlerProxy { get; set; }
+        int FiddlerProxyPort { get; set; }
     }
 }
