@@ -9,13 +9,21 @@ After cloning the source and building let's leverage the command-line.
     $ Krawlr.exe --url http://global.clsnightly.test.janison.com
     
     // While crawling it's possible to ignore some routes by supplying a simple list of keywords to ignore
-    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --exclusions ExcludeUrls.txt
+    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --exclude ExcludeUrls.txt
     
     // Krawlr can follow a preset list of routes to follow
-    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --inclusions Routes.txt --follow-links no
+    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --include Routes.txt --follow-links no
     
     // Need to login to a page? It's possible to manipulate the DOM with Page Actions (more below)
     $ Krawlr.exe --url http://global.clsnightly.test.janison.com --scripts Path\to\scripts
+    
+    // Use ChromeDriver?
+    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --webdriver=Chrome
+    
+    // Experimental - disconnected client/server
+    // RabbitMQ server needs to be installed and running (Krawlr will not autostart RabbitMQ server).
+    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --server
+    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --client
 
 ## Arguments
 
@@ -72,6 +80,3 @@ Sample exclusion file
 ` This is a comment (backtick)
 delete
 ```
-
-Install Erlang,
-Install RabbitMq Server
