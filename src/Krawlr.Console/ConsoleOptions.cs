@@ -57,9 +57,9 @@ namespace Krawlr.Core
             };
             List<string> extra = optionSet.Parse(args);
 
-            if (!BaseUrl.HasValue())
+            if (!BaseUrl.HasValue() && DistributionMode.In(DistributionMode.ClientServer, DistributionMode.Server))
             {
-                System.Console.WriteLine("BaseUrl is a required commandline argument to run the app.");
+                System.Console.WriteLine("BaseUrl is a required commandline argument to run the app as a Server.");
                 HasError = true;
             }
 

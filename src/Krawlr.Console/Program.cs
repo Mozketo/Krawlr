@@ -1,15 +1,10 @@
 ﻿using DryIoc;
 using Krawlr.Core;
-using Krawlr.Core.DTO;
 using Krawlr.Core.Services;
-using MZMemoize.Extensions;
-using OpenQA.Selenium;
+using Krawlr.Core.Extensions;
 using ServiceStack;
 using ServiceStack.Messaging;
-using ServiceStack.RabbitMq;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Krawlr.Console
 {
@@ -36,14 +31,24 @@ namespace Krawlr.Console
 
                 container.Register<IWriterService, WriterService>(Reuse.Singleton);
 
-                container.Register<IWebDriverService, WebDriverService>();
-                container.RegisterDelegate(r => r.Resolve<IWebDriverService>().Get(), Reuse.Singleton);
-                container.Register<IPageActionService, PageActionService>(Reuse.Singleton);
-                container.Register<Page, Page>();
+                // If running as a client then register the client components.
+                if (configuration.DistributionMode.In(DistributionMode.ClientServer, DistributionMode.Client))
+                {
+                    container.Register<IWebDriverService, WebDriverService>();
+                    container.RegisterDelegate(r => r.Resolve<IWebDriverService>().Get(), Reuse.Singleton);
+                    container.Register<IPageActionService, PageActionService>(Reuse.Singleton);
+                    container.Register<Page, Page>();
+                }
 
                 container.Register<IMessageQueueServer, MessageQueueServer>();
                 container.RegisterDelegate<IMessageService>(r => r.Resolve<IMessageQueueServer>().Instance(), Reuse.Singleton);
-                container.Register<IListen, NavigationListener>(Reuse.Singleton);
+
+                if (configuration.DistributionMode.In(DistributionMode.ClientServer, DistributionMode.Client))
+                {
+                    container.Register<IListen, NavigationListener>(Reuse.Singleton);
+                    var navigationListener = container.Resolve<IListen>();
+                    navigationListener.Listen();
+                }
 
                 //var mqServer = container.Resolve<IMessageService>();
                 //log.Warn("Starting MQ server");
@@ -83,13 +88,13 @@ namespace Krawlr.Console
                 //    log.Debug($"looping {DateTime.Now}");
                 //}
 
-                var navigationListener = container.Resolve<IListen>();
-                navigationListener.Listen();
-
-                container.Register<IUrlQueueService, UrlQueueService>(Reuse.Singleton);
-                var queueService = container.Resolve<IUrlQueueService>();
-                queueService.Add(configuration.BaseUrl);
-                queueService.Add(configuration.Inclusions);
+                if (configuration.DistributionMode.In(DistributionMode.ClientServer, DistributionMode.Server))
+                {
+                    container.Register<IUrlQueueService, UrlQueueService>(Reuse.Singleton);
+                    var queueService = container.Resolve<IUrlQueueService>();
+                    queueService.Add(configuration.BaseUrl);
+                    queueService.Add(configuration.Inclusions);
+                }
 
                 //container.Resolve<Application>().Start();
                 while (true)

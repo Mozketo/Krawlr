@@ -104,6 +104,7 @@
     <Compile Include="DTO\Url.cs" />
     <Compile Include="Extensions\FileEx.cs" />
     <Compile Include="Extensions\StringEx.cs" />
+    <Compile Include="Extensions\Tex.cs" />
     <Compile Include="Extensions\WebDriverEx.cs" />
     <Compile Include="IConfiguration.cs" />
     <Compile Include="Log.cs" />
