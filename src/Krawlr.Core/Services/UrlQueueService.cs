@@ -15,16 +15,15 @@ namespace Krawlr.Core.Services
         event ProgressEventHandler Progress;
         void Add(string url);
         void Add(IEnumerable<string> urls);
-        bool TryDequeue(out string url);
-        bool TryPeek(out string url);
-        bool Peek();
+        //bool TryDequeue(out string url);
+        //bool TryPeek(out string url);
+        //bool Peek();
     }
 
     public class UrlQueueService : IUrlQueueService
     {
         const string _guid = "guid";
 
-        static ConcurrentQueue<string> Queue = new ConcurrentQueue<string>();
         static HashSet<string> List = new HashSet<string>();
 
         public event ProgressEventHandler Progress;
@@ -78,7 +77,6 @@ namespace Krawlr.Core.Services
                 return;
 
             List.Add(path); // TODO: Add Lock?
-            //Queue.Enqueue(url);
             Publish(url);
         }
 
@@ -104,27 +102,6 @@ namespace Krawlr.Core.Services
                 // Parse for new links
                 Add(response.Links);
             }
-        }
-
-        public bool TryDequeue(out string url)
-        {
-            if (Progress != null)
-                Progress(this, new ProgressEventArgs { Remaining = Queue.Count, Count = List.Count() });
-
-            bool result = Queue.TryDequeue(out url);
-            return result;
-        }
-
-        public bool TryPeek(out string url)
-        {
-            bool result = Queue.TryPeek(out url);
-            return result;
-        }
-
-        public bool Peek()
-        {
-            string url;
-            return Queue.TryPeek(out url);
         }
     }
 
