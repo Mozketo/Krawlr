@@ -92,6 +92,12 @@ namespace Krawlr.Console
                 {
                     container.Register<IUrlQueueService, UrlQueueService>(Reuse.Singleton);
                     var queueService = container.Resolve<IUrlQueueService>();
+
+                    queueService.Progress += (sender, a) =>
+                    {
+                        log.Warn($"{a.Remaining} pages remaining. {a.Count} parsed.");
+                    };
+
                     queueService.Add(configuration.BaseUrl);
                     queueService.Add(configuration.Inclusions);
 
