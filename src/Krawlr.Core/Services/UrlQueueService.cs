@@ -13,6 +13,8 @@ namespace Krawlr.Core.Services
     public interface IUrlQueueService
     {
         event ProgressEventHandler Progress;
+        int QueueSize { get; }
+        bool IsProcessing { get; }
         void Add(string url);
         void Add(IEnumerable<string> urls);
         //bool TryDequeue(out string url);
@@ -24,13 +26,16 @@ namespace Krawlr.Core.Services
     {
         const string _guid = "guid";
 
-        static HashSet<string> List = new HashSet<string>();
-
         public event ProgressEventHandler Progress;
+        static HashSet<string> List = new HashSet<string>();
+        static ConcurrentDictionary<string, bool> BusMirror = new ConcurrentDictionary<string, bool>();
 
         protected IConfiguration _options;
         protected IMessageService _mQServer;
         protected IWriterService _writer;
+
+        public bool IsProcessing { get { return BusMirror.Values.Any(v => v == false); } }
+        public int QueueSize { get { return BusMirror.Values.Count(v => v == false); } }
 
         public UrlQueueService(IConfiguration options, IMessageService messageService, IWriterService writer)
         {
@@ -89,6 +94,7 @@ namespace Krawlr.Core.Services
         {
             using (var mqClient = _mQServer.CreateMessageQueueClient())
             {
+                BusMirror.TryAdd(url, false);
                 mqClient.Publish(new Url { Path = url, });
 
                 // Now wait for the response
@@ -101,6 +107,9 @@ namespace Krawlr.Core.Services
 
                 // Parse for new links
                 Add(response.Links);
+
+                // Update the BusMirror to reflect processing is complete
+                BusMirror.TryUpdate(url, true, false);
             }
         }
     }

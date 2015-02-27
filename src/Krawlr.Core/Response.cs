@@ -22,7 +22,7 @@
         {
             get
             {
-                return String.Join("\n", JavascriptErrors);
+                return String.Join("\n", JavascriptErrors.EmptyIfNull());
             }
         }
 

@@ -2,8 +2,9 @@
 {
     using Krawlr.Core.DTO;
     using System;
+    using ServiceStack.Messaging;
+    using System.Collections.Generic;
     using System.Linq;
-    using ServiceStack.Messaging;    
 
     public interface IListen
     {
@@ -48,15 +49,15 @@
                 _actionService.Invoke(response.Url);
 
                 // Get links
-                if (_configuration.FollowPageLinks)
+                IEnumerable<string> links = Enumerable.Empty<string>();
+                if (_configuration.NoFollowLinks == false)
                 {
                     timer = System.Diagnostics.Stopwatch.StartNew();
-                    var links = _page.Links();
+                    links = _page.Links();
                     _log.Debug($"Fetch links took {timer.ElapsedMilliseconds} ms");
-                    return new UrlResponse { Response = response, Links = links };
                 }
 
-                return Enumerable.Empty<string>();
+                return new UrlResponse { Response = response, Links = links };
             });
             _mQServer.Start();
         }

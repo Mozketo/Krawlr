@@ -94,6 +94,13 @@ namespace Krawlr.Console
                     var queueService = container.Resolve<IUrlQueueService>();
                     queueService.Add(configuration.BaseUrl);
                     queueService.Add(configuration.Inclusions);
+
+                    while (queueService.IsProcessing)
+                    {
+                        System.Threading.Thread.Sleep(200);
+                    }
+
+                    return 0;
                 }
 
                 //container.Resolve<Application>().Start();
