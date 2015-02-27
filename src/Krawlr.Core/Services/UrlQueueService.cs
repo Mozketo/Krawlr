@@ -13,13 +13,10 @@ namespace Krawlr.Core.Services
     public interface IUrlQueueService
     {
         event ProgressEventHandler Progress;
+        bool Peek { get; }
         int QueueSize { get; }
-        bool IsProcessing { get; }
         void Add(string url);
         void Add(IEnumerable<string> urls);
-        //bool TryDequeue(out string url);
-        //bool TryPeek(out string url);
-        //bool Peek();
     }
 
     public class UrlQueueService : IUrlQueueService
@@ -34,7 +31,7 @@ namespace Krawlr.Core.Services
         protected IMessageService _mQServer;
         protected IWriterService _writer;
 
-        public bool IsProcessing { get { return BusMirror.Values.Any(v => v == false); } }
+        public bool Peek { get { return BusMirror.Values.Any(v => v == false); } }
         public int QueueSize { get { return BusMirror.Values.Count(v => v == false); } }
 
         public UrlQueueService(IConfiguration options, IMessageService messageService, IWriterService writer)

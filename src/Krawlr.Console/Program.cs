@@ -95,7 +95,7 @@ namespace Krawlr.Console
                     queueService.Add(configuration.BaseUrl);
                     queueService.Add(configuration.Inclusions);
 
-                    while (queueService.IsProcessing)
+                    while (queueService.Peek)
                     {
                         System.Threading.Thread.Sleep(200);
                     }
