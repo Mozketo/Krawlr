@@ -110,7 +110,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="Listeners\NavigationListener.cs" />
     <Compile Include="Services\MessageDelivery.cs" />
-    <Compile Include="Services\OutputService.cs" />
+    <Compile Include="Services\WriterService.cs" />
     <Compile Include="Services\PageActionService.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
