@@ -23,6 +23,7 @@
         public DateTime Created { get; protected set; }
         public string Url { get; set; }
         public string Domain { get { return DomainPart(this.Url); } }
+        public string RelativeUrl { get { return new Uri(Url).PathAndQuery; } }
         public int Code { get; set; }
         public IEnumerable<string> JavascriptErrors { get; set; }
         public bool HasJavscriptErrors { get { return JavascriptErrors.EmptyIfNull().Any(); } }

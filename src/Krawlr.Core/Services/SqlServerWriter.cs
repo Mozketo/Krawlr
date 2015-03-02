@@ -58,7 +58,7 @@
                 {
                     crawlRunId = id,
                     domain = response.Domain,
-                    url = response.Url,
+                    url = response.RelativeUrl,
                     created = response.Created,
                     code = response.Code,
                     hasJavascriptErrors = response.HasJavscriptErrors,
