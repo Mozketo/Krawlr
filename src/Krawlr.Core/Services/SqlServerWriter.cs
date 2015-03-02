@@ -15,15 +15,15 @@
         protected ILog _log;
         protected StreamWriter _writer;
 
-        static Func<string, string, int> CrawlRunId = new Func<string, string, int>((connString, domain) =>
+        static Func<string, string, string, int> CrawlRunId = new Func<string, string, string, int>((connString, domain, metadata) =>
         {
             int id;
-            string sql = @"INSERT INTO CrawlRun (Created, Domain) VALUES (@created, @domain);
+            string sql = @"INSERT INTO CrawlRun (Created, Domain, Metadata) VALUES (@created, @domain, @metadata);
                            SELECT CAST(SCOPE_IDENTITY() as int)";
             using (SqlConnection conn = new SqlConnection(connString))
             {
                 conn.Open();
-                id = conn.Query<int>(sql, new { Created = DateTime.Now, Domain = domain }).Single();
+                id = conn.Query<int>(sql, new { Created = DateTime.Now, Domain = domain, Metadata = metadata }).Single();
             }
             return id;
         })
@@ -48,7 +48,7 @@
 
             using (SqlConnection conn = new SqlConnection(_configuration.Output))
             {
-                int id = CrawlRunId(_configuration.Output, response.Domain);
+                int id = CrawlRunId(_configuration.Output, response.Domain, _configuration.Metadata);
                 string sql = @"INSERT INTO CrawlResults 
                         (CrawlRunId, Domain, Url, Created, Code, HasJavascriptErrors, TimeTakenMs, JavascriptErrors) 
                         VALUES 

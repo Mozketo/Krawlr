@@ -28,6 +28,7 @@
         IEnumerable<string> Exclusions { get; }
         IEnumerable<string> Inclusions { get; }
         string Output { get; }
+        string Metadata { get; }
 
         // Configuration settings for WebDriver
         IConfigurationWebDriver WebDriver { get; set; }

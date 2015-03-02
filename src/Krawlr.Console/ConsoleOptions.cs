@@ -44,6 +44,7 @@ namespace Krawlr.Core
                 { "i|include=", "Path to a file with a hard list of routes to hit (will follow in order). Use with --no-follow-links false.", v => InclusionsFilePath = v },
                 { "s|scripts=", "After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.", v => PageScriptsPath = v },
                 { "o|output=", "Write crawling activity to CSV file with path or write to a SQL Server DB with a connection string.", v => Output = v },
+                { "metadata=", "When using the DB writer the metadata will be written to the CrawlRun entity.", v => Metadata = v },
 
                 // Webdriver
                 { "w|webdriver=", "Define WebDriver to use. Firefox, Chrome, Remote (Default: Firefox)", v => WebDriver.Driver = v },
@@ -87,6 +88,7 @@ namespace Krawlr.Core
         public string InclusionsFilePath { get; protected set; }
         public string PageScriptsPath { get; protected set; }
         public string Output { get; protected set; }
+        public string Metadata { get; protected set; }
 
         public IEnumerable<string> Exclusions { get { return readFile(ExclusionsFilePath); } }
         public IEnumerable<string> Inclusions { get { return readFile(InclusionsFilePath); } }

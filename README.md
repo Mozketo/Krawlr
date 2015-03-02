@@ -36,6 +36,7 @@ After cloning the source and building let's leverage the command-line.
     -i, --include=VALUE    Path to a file with a hard list of routes to hit (will follow in order). Use with --no-follow-links false.
     -s, --scripts=VALUE    After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.
     -o, --output=VALUE     Write crawling activity to CSV file with path or write to a SQL Server DB with a connection string.
+    --metadata=VALUE       When using the DB writer the metadata will be written to the CrawlRun entity.
     -w, --webdriver=VALUE  Define WebDriver to use. Firefox, Chrome, Remote (Default: Firefox)
     --webdriver-proxy      Using Chrome or Remote should route via FiddlerCore?
     --webdriver-proxy-port If WebDriver proxy is engaged define the port to use. (Default: 0 (autoselect))
