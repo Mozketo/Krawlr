@@ -6,6 +6,8 @@
     using MZMemoize.Extensions;
     using System.Data.SqlClient;
     using MZMemoize;
+    using Dapper;
+    using System.Linq;
 
     public class SqlServerWriter : IWriterService
     {
@@ -13,9 +15,17 @@
         protected ILog _log;
         protected StreamWriter _writer;
 
-        static Func<string> CrawlRunId = new Func<string>(() =>
+        static Func<string, string, int> CrawlRunId = new Func<string, string, int>((connString, domain) =>
         {
-            return Guid.NewGuid().ToString().Substring(0, 6);
+            int id;
+            string sql = @"INSERT INTO CrawlRun (Created, Domain) VALUES (@created, @domain);
+                           SELECT CAST(SCOPE_IDENTITY() as int)";
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+                id = conn.Query<int>(sql, new { Created = DateTime.Now, Domain = domain }).Single();
+            }
+            return id;
         })
         .Memoize(threadSafe: true);
 
@@ -38,25 +48,23 @@
 
             using (SqlConnection conn = new SqlConnection(_configuration.Output))
             {
-                conn.Open();
-                using (SqlCommand command = conn.CreateCommand())
-                {
-                    command.CommandText = @"INSERT INTO CrawlResults 
+                int id = CrawlRunId(_configuration.Output, response.Domain);
+                string sql = @"INSERT INTO CrawlResults 
                         (CrawlRunId, Domain, Url, Created, Code, HasJavascriptErrors, TimeTakenMs, JavascriptErrors) 
                         VALUES 
                         (@crawlRunId, @domain, @url, @created, @code, @hasJavascriptErrors, @timeTakenMs, @javascriptErrors)";
-
-                    command.Parameters.AddWithValue("@crawlRunId", CrawlRunId());
-                    command.Parameters.AddWithValue("@domain", response.Domain);
-                    command.Parameters.AddWithValue("@url", response.Url);
-                    command.Parameters.AddWithValue("@created", response.Created);
-                    command.Parameters.AddWithValue("@code", response.Code);
-                    command.Parameters.AddWithValue("@hasJavascriptErrors", response.HasJavscriptErrors);
-                    command.Parameters.AddWithValue("@timeTakenMs", response.TimeTakenMs);
-                    command.Parameters.AddWithValue("@javascriptErrors", response.LoggableJavascriptErrors);
-
-                    command.ExecuteNonQuery();
-                }
+                conn.Open();
+                conn.Execute(sql, new
+                {
+                    crawlRunId = id,
+                    domain = response.Domain,
+                    url = response.Url,
+                    created = response.Created,
+                    code = response.Code,
+                    hasJavascriptErrors = response.HasJavscriptErrors,
+                    timeTakenMs = response.TimeTakenMs,
+                    javascriptErrors = response.LoggableJavascriptErrors,
+                });
             }
         }
     }
