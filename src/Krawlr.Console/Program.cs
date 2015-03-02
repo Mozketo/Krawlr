@@ -29,7 +29,7 @@ namespace Krawlr.Console
                     return (int)ExitCode.InvalidArgs;
                 log.Info($"Starting Krawlr with URL {configuration.BaseUrl}");
 
-                container.Register<IWriterService, WriterService>(Reuse.Singleton);
+                container.Register<IWriterService, CsvWriter>(Reuse.Singleton);
 
                 // If running as a client then register the client components.
                 if (configuration.DistributionMode.In(DistributionMode.ClientServer, DistributionMode.Client))
