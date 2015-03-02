@@ -43,7 +43,7 @@ namespace Krawlr.Core
                 { "e|exclude=", "Path to a file with list of routes/keywords in URL to bypass.", v => ExclusionsFilePath = v },
                 { "i|include=", "Path to a file with a hard list of routes to hit (will follow in order). Use with --no-follow-links false.", v => InclusionsFilePath = v },
                 { "s|scripts=", "After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.", v => PageScriptsPath = v },
-                { "o|output=", "Write crawling activity to CSV file with path...", v => OutputPath = v },
+                { "o|output=", "Write crawling activity to CSV file with path or write to a SQL Server DB with a connection string.", v => Output = v },
 
                 // Webdriver
                 { "w|webdriver=", "Define WebDriver to use. Firefox, Chrome, Remote (Default: Firefox)", v => WebDriver.Driver = v },
@@ -86,7 +86,7 @@ namespace Krawlr.Core
         public string ExclusionsFilePath { get; protected set; }
         public string InclusionsFilePath { get; protected set; }
         public string PageScriptsPath { get; protected set; }
-        public string OutputPath { get; protected set; }
+        public string Output { get; protected set; }
 
         public IEnumerable<string> Exclusions { get { return readFile(ExclusionsFilePath); } }
         public IEnumerable<string> Inclusions { get { return readFile(InclusionsFilePath); } }

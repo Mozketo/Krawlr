@@ -35,7 +35,7 @@ After cloning the source and building let's leverage the command-line.
     -e, --exclude=VALUE    Path to a file with list of routes/keywords in URL to bypass.
     -i, --include=VALUE    Path to a file with a hard list of routes to hit (will follow in order). Use with --no-follow-links false.
     -s, --scripts=VALUE    After each page is loaded a script may be executed against the page to manipulate the DOM. Recommended for adding Login support to the crawl.
-    -o, --output=VALUE     Write crawling activity to CSV file with path...
+    -o, --output=VALUE     Write crawling activity to CSV file with path or write to a SQL Server DB with a connection string.
     -w, --webdriver=VALUE  Define WebDriver to use. Firefox, Chrome, Remote (Default: Firefox)
     --webdriver-proxy      Using Chrome or Remote should route via FiddlerCore?
     --webdriver-proxy-port If WebDriver proxy is engaged define the port to use. (Default: 0 (autoselect))

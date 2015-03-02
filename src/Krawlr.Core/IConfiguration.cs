@@ -27,7 +27,7 @@
         string InclusionsFilePath { get; }
         IEnumerable<string> Exclusions { get; }
         IEnumerable<string> Inclusions { get; }
-        string OutputPath { get; }
+        string Output { get; }
 
         // Configuration settings for WebDriver
         IConfigurationWebDriver WebDriver { get; set; }

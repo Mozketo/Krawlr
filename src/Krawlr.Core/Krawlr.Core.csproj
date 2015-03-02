@@ -107,11 +107,12 @@
     <Compile Include="Log.cs" />
     <Compile Include="Listeners\NavigationListener.cs" />
     <Compile Include="Services\MessageDelivery.cs" />
-    <Compile Include="Services\WriterService.cs" />
+    <Compile Include="Services\CsvWriter.cs" />
     <Compile Include="Services\PageActionService.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />
+    <Compile Include="Services\SqlServerWriter.cs" />
     <Compile Include="Services\UrlQueueService.cs" />
     <Compile Include="Services\WebDriverService.cs" />
   </ItemGroup>

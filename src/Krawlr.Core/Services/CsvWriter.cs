@@ -21,8 +21,8 @@
             _configuration = configuration;
             _log = log;
 
-            if (_configuration.OutputPath.ExistsEx())
-                File.Delete(_configuration.OutputPath);
+            if (_configuration.Output.ExistsEx())
+                File.Delete(_configuration.Output);
         }
 
         public void Write(Response response)
@@ -33,11 +33,11 @@
                 _log.WriteLine(response.ToString(), color);
             }
 
-            if (!_configuration.OutputPath.HasValue())
+            if (!_configuration.Output.HasValue())
                 return;
 
             var csv = response.ToCsv();
-            File.WriteAllLines(_configuration.OutputPath, new[] { csv });
+            File.WriteAllLines(_configuration.Output, new[] { csv });
         }
     }
 }

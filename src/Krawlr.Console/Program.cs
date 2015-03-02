@@ -5,6 +5,7 @@ using Krawlr.Core.Extensions;
 using ServiceStack;
 using ServiceStack.Messaging;
 using System.Linq;
+using MZMemoize.Extensions;
 
 namespace Krawlr.Console
 {
@@ -29,7 +30,10 @@ namespace Krawlr.Console
                     return (int)ExitCode.InvalidArgs;
                 log.Info($"Starting Krawlr with URL {configuration.BaseUrl}");
 
-                container.Register<IWriterService, CsvWriter>(Reuse.Singleton);
+                if (configuration.Output.ContainsEx("Data Source="))
+                    container.Register<IWriterService, SqlServerWriter>(Reuse.Singleton);
+                else
+                    container.Register<IWriterService, CsvWriter>(Reuse.Singleton);
 
                 // If running as a client then register the client components.
                 if (configuration.DistributionMode.In(DistributionMode.ClientServer, DistributionMode.Client))
