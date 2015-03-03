@@ -5,6 +5,10 @@ C# &amp; Selenium web page crawler. It's easy to use and designed to be run from
 
 Soon.
 
+## Build
+
+After downloading the source you run `build.cmd` navigate to `\Krawlr.Console\Bin\Release` and _boom_ there's Krawlr.
+
 ## Usage
 
 After cloning the source and building let's leverage the command-line. 
@@ -26,7 +30,7 @@ After cloning the source and building let's leverage the command-line.
     
     // Persist results in Database (SQL Server) and persist some metadata against the _CrawlRun_ table
     --url http://my-awesome-site.com/ --output "Data Source=<server>;Initial Catalog=<datbase-name>;User ID=<user>;Password=<password>" --metadata "production v1.0"
-    
+
     // Experimental - disconnected client/server
     // RabbitMQ server needs to be installed and running (Krawlr will not autostart RabbitMQ server).
     $ Krawlr.exe --url http://my-awesome-site.com/ --server
