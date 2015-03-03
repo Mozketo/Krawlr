@@ -1,29 +1,36 @@
 # Krawlr
 C# &amp; Selenium web page crawler. It's easy to use and designed to be run from the commandline.
 
+## Download
+
+Soon.
+
 ## Usage
 
 After cloning the source and building let's leverage the command-line. 
 
     // The simplest way to start the crawl
-    $ Krawlr.exe --url http://global.clsnightly.test.janison.com
+    $ Krawlr.exe --url http://simple-crawl.com/
     
     // While crawling it's possible to ignore some routes by supplying a simple list of keywords to ignore
-    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --exclude ExcludeUrls.txt
+    $ Krawlr.exe --url http://my-awesome-site.com/ --exclude ExcludeUrls.txt
     
     // Krawlr can follow a preset list of routes to follow
-    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --include Routes.txt --follow-links no
+    $ Krawlr.exe --url http://my-awesome-site.com/ --include Routes.txt --follow-links no
     
     // Need to login to a page? It's possible to manipulate the DOM with Page Actions (more below)
-    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --scripts Path\to\scripts
+    $ Krawlr.exe --url http://crawl.me/ --scripts Path\to\scripts
     
     // Use ChromeDriver?
-    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --webdriver=Chrome
+    $ Krawlr.exe --url http://so-awesome.com/ --webdriver=Chrome
+    
+    // Persist results in Database (SQL Server) and persist some metadata against the _CrawlRun_ table
+    --url http://my-awesome-site.com/ --output "Data Source=<server>;Initial Catalog=<datbase-name>;User ID=<user>;Password=<password>" --metadata "production v1.0"
     
     // Experimental - disconnected client/server
     // RabbitMQ server needs to be installed and running (Krawlr will not autostart RabbitMQ server).
-    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --server
-    $ Krawlr.exe --url http://global.clsnightly.test.janison.com --client
+    $ Krawlr.exe --url http://my-awesome-site.com/ --server
+    $ Krawlr.exe --url http://my-awesome-site.com/ --client
 
 ## Arguments
 
@@ -54,7 +61,23 @@ Take a look at a *sample* or two in the source [repo](src/Krawlr.Console/PageAct
 
 ## Reporting
 
-By enabling the `--output` commandline argument a crawl history will be written out with the following headers:
+### Exporting to Database (SQL Server)
+
+You can leverage the `--output` commandline argument with a database connection string (current we only support SQL Server). The crawl history will be stored in a database as opposed to a CSV (as configured below). Database persistance offers a little more information (see `--metadata` argument) and makes it easier to spot trends or changes in the data over time.
+
+Interested in using a DB connection instead of CSV? Then you'll need to perform the following:
+
+1. Find a SQL Server instance locally or somewhere on a server. Maybe you're lucky and you don't need to configure it yourself,
+2. Run [this](scripts/Krawlr-SqlServer-CreateTablesAndKeys.sql) script to add the required tables to the database,
+3. Configure your commandline arguments to use this database. See examples above in _Usage_.
+
+As the crawl begins a record will be stored in the _CrawlRun_ table along with the base domain used, time started, and metadata passed on the commandline.
+
+As the crawl progresses the results are stored in the _CrawlResults_ table and are linked back to the _CrawlRun_ table via the _CrawlRunId_ field. This makes it easy to find the crawl results for a particular run.
+
+### Exporting to CSV
+
+By enabling the `--output` commandline argument a crawl history will be written out with the following information:
 
 * URL,
 * Page response code (eg 200, 404, 500),
@@ -77,7 +100,9 @@ http://somesite.com/list/something
 Sample exclusion file
 
 ```
-/logout
-` This is a comment (backtick)
+` This is a comment (backtick).
+` We can filter by a route like this,
+/auth/logout
+` Or just exclude URLs based on a keyword.
 delete
 ```
