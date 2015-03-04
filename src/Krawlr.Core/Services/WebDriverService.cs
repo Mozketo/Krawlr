@@ -2,8 +2,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using System;
-using System.Linq;
-using Krawlr.Core.Extensions;
 using System.Diagnostics;
 using MZMemoize.Extensions;
 
@@ -14,7 +12,7 @@ namespace Krawlr.Core.Services
         IWebDriver Get();
     }
 
-    public class WebDriverService : IWebDriverService
+    public class WebDriverService : BaseWebDriverService, IWebDriverService
     {
         protected IConfiguration _configuration;
         protected ILog _log;
@@ -29,21 +27,13 @@ namespace Krawlr.Core.Services
         public IWebDriver Get()
         {
             OpenQA.Selenium.Proxy proxy = null;
-
             if (_configuration.WebDriver.UseFiddlerProxy)
-            {
-                // Note that we're using a port of 0, which tells Fiddler to
-                // select a random available port to listen on.
-                int proxyPort = StartFiddlerProxy(_configuration.WebDriver.FiddlerProxyPort);
-
-                // We are only proxying HTTP traffic, but could just as easily
-                // proxy HTTPS or FTP traffic.
-                proxy = new OpenQA.Selenium.Proxy { HttpProxy = String.Format("127.0.0.1:{0}", proxyPort) };
-            }
+                proxy = base.GetProxy(_configuration);
 
             var capabilities = _configuration.WebDriver.Driver.EqualsEx("firefox")
                 ? DesiredCapabilities.Firefox()
                 : DesiredCapabilities.Chrome();
+
             if (proxy != null)
                 capabilities.SetCapability(CapabilityType.Proxy, proxy);
 
@@ -53,8 +43,48 @@ namespace Krawlr.Core.Services
             }
             return new RemoteWebDriver(new Uri("http://localhost:9515"), capabilities);
         }
+    }
 
-        protected int StartFiddlerProxy(int desiredPort)
+    public class IEWebDriverService : BaseWebDriverService, IWebDriverService
+    {
+        protected IConfiguration _configuration;
+        protected ILog _log;
+        protected Process _process;
+
+        public IEWebDriverService(IConfiguration configuration, ILog log)
+        {
+            _configuration = configuration;
+            _log = log;
+        }
+
+        public IWebDriver Get()
+        {
+            OpenQA.Selenium.Proxy proxy = null;
+            if (_configuration.WebDriver.UseFiddlerProxy)
+                proxy = base.GetProxy(_configuration);
+
+            var options = new OpenQA.Selenium.IE.InternetExplorerOptions();
+            options.EnsureCleanSession = true;
+            options.Proxy = proxy;
+
+            return new OpenQA.Selenium.IE.InternetExplorerDriver(options);
+        }
+    }
+
+    public abstract class BaseWebDriverService
+    {
+        protected virtual OpenQA.Selenium.Proxy GetProxy(IConfiguration configuration)
+        {
+            // Note that we're using a port of 0, which tells Fiddler to
+            // select a random available port to listen on.
+            int proxyPort = StartFiddlerProxy(configuration.WebDriver.FiddlerProxyPort);
+
+            // We are only proxying HTTP traffic, but could just as easily
+            // proxy HTTPS or FTP traffic.
+            return new OpenQA.Selenium.Proxy { HttpProxy = String.Format("127.0.0.1:{0}", proxyPort) };
+        }
+
+        protected virtual int StartFiddlerProxy(int desiredPort)
         {
             // We explicitly do *NOT* want to register this running Fiddler instance as the system proxy. 
             // This lets us keep isolation.
@@ -64,22 +94,5 @@ namespace Krawlr.Core.Services
             int proxyPort = FiddlerApplication.oProxy.ListenPort;
             return proxyPort;
         }
-
-        //public void StartRemoteDriverIf()
-        //{
-        //    var path = _configuration.RemoteDriverPath;
-        //    if (!path.ExistsEx())
-        //        return;
-
-        //    _log.Info($"Starting remote driver from {path}");
-
-        //    _process = Process.Start(new ProcessStartInfo
-        //    {
-        //        FileName = path,
-        //        RedirectStandardOutput = false,
-        //        RedirectStandardError = false,
-        //        UseShellExecute = true,
-        //    });
-        //}
     }
 }
