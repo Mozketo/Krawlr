@@ -46,7 +46,9 @@
                 response.Code = _page.ReponseCode;
 
                 // Selenium scripts for this URL
+                timer = System.Diagnostics.Stopwatch.StartNew();
                 _actionService.Invoke(response.Url);
+                _log.Debug($"Selenium scripts took {timer.ElapsedMilliseconds} ms");
 
                 // Get links
                 IEnumerable<string> links = Enumerable.Empty<string>();

@@ -25,13 +25,20 @@ namespace Krawlr.Core
 
         public IEnumerable<string> Links()
         {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(Driver.PageSource);
+            //var doc = new HtmlDocument();
+            //doc.LoadHtml(Driver.PageSource);
 
-            var links = doc.DocumentNode.SelectNodes("//a")
-                .EmptyIfNull()
-                .Select(p => p.GetAttributeValue("href", String.Empty))
-                .Distinct();
+            //var links = doc.DocumentNode.SelectNodes("//a")
+            //    .EmptyIfNull()
+            //    .Select(p => p.GetAttributeValue("href", String.Empty))
+            //    .Distinct();
+            //return links;
+
+            var links = Driver.FindElements(By.TagName("a")).Select(el =>
+                {
+                    try { return el.GetAttribute("href"); }
+                    catch { return null; }
+                });
             return links;
         }
 
@@ -92,8 +99,9 @@ namespace Krawlr.Core
             var executor = Driver as IJavaScriptExecutor;
             IEnumerable<object> result;
 
-            try {
-                 result = executor.ExecuteScript(errorRetrievalScript) as IEnumerable<object>;
+            try
+            {
+                result = executor.ExecuteScript(errorRetrievalScript) as IEnumerable<object>;
             }
             catch (Exception ex)
             {

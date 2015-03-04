@@ -43,11 +43,14 @@ namespace Krawlr.Core.Services
 
         public void Add(string url)
         {
+            if (!url.HasValue())
+                return;
+
             // If relative URL assume that it's for the current site.
             if (url.IndexOf('/') == 0)
                 url = $"{_options.BaseUrl.RemoveTrailing('/')}{url}";
 
-            if (!url.HasValue() || url.StartsWith(_options.BaseUrl) == false)
+            if (url.StartsWith(_options.BaseUrl) == false)
                 return;
 
             var uri = new Uri(url);
