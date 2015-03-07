@@ -39,7 +39,7 @@ namespace Krawlr.Core
                     try { return el.GetAttribute("href"); }
                     catch { return null; }
                 });
-            return links;
+            return links.Distinct();
         }
 
         public void NavigateToViewWithJsErrorProxy(string targetUrl)
