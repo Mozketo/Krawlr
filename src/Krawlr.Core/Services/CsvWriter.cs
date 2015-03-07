@@ -37,7 +37,7 @@
                 return;
 
             var csv = response.ToCsv();
-            File.WriteAllLines(_configuration.Output, new[] { csv });
+            File.AppendAllLines(_configuration.Output, new[] { csv });
         }
     }
 }
