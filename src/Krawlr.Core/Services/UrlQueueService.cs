@@ -98,7 +98,7 @@ namespace Krawlr.Core.Services
                 mqClient.Publish(new Url { Path = url, });
 
                 // Now wait for the response
-                IMessage<UrlResponse> responseMsg = mqClient.Get<UrlResponse>(QueueNames<UrlResponse>.In, TimeSpan.FromSeconds(90));
+                IMessage<UrlResponse> responseMsg = mqClient.Get<UrlResponse>(QueueNames<UrlResponse>.In, TimeSpan.FromSeconds(180));
                 mqClient.Ack(responseMsg);
                 var response = responseMsg.GetBody();
 
