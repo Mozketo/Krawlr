@@ -52,10 +52,11 @@
 
                 // Get links
                 IEnumerable<string> links = Enumerable.Empty<string>();
-                if (_configuration.NoFollowLinks == false)
+                if (_configuration.IgnoreLinks == false)
                 {
                     timer = System.Diagnostics.Stopwatch.StartNew();
                     links = _page.Links();
+                    //_log.Debug(String.Join(Environment.NewLine, links));
                     _log.Debug($"Fetch links took {timer.ElapsedMilliseconds} ms");
                 }
 

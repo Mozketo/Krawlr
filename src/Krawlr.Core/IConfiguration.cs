@@ -18,7 +18,7 @@
         DistributionMode DistributionMode { get; }
 
         string BaseUrl { get; }
-        bool NoFollowLinks { get; }
+        bool IgnoreLinks { get; }
         bool Quiet { get; }
         bool IgnoreGuids { get; }
         int MaxPageLinksToFollow { get; }

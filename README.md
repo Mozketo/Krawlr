@@ -20,7 +20,7 @@ After cloning the source and building let's leverage the command-line.
     $ Krawlr.exe --url http://my-awesome-site.com/ --exclude ExcludeUrls.txt
     
     // Krawlr can follow a preset list of routes to follow
-    $ Krawlr.exe --url http://my-awesome-site.com/ --include Routes.txt --follow-links no
+    $ Krawlr.exe --url http://my-awesome-site.com/ --include Routes.txt --ignore-links
     
     // Need to login to a page? It's possible to manipulate the DOM with Page Actions (more below)
     $ Krawlr.exe --url http://crawl.me/ --scripts Path\to\scripts
@@ -40,7 +40,7 @@ After cloning the source and building let's leverage the command-line.
 
     -u, --url=VALUE        Starting URL to begin crawling.
     -q, --quiet            Run quietly with less detailed console logging
-    --no-follow-links      After loading a page don't find and follow links on the page
+    --ignore-links      After loading a page Krawlr will not follow links on the page
     --ignore-guids         When analysing URLs remove guids as this removes repeat crawling like /items/item/guid. Value is yes / no (Default: yes) 
     --max-follow-links=VALUE Limit the number of pages to crawl. Default: 0 (no limit).
     -e, --exclude=VALUE    Path to a file with list of routes/keywords in URL to bypass.

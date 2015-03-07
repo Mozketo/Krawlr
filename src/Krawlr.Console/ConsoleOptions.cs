@@ -17,7 +17,7 @@ namespace Krawlr.Core
         {
             DistributionMode = DistributionMode.ClientServer;
 
-            NoFollowLinks = false;
+            IgnoreLinks = false;
             IgnoreGuids = true;
             PageScriptsPath = Path.GetDirectoryName(typeof(IConfiguration).Assembly.Location);
 
@@ -35,7 +35,7 @@ namespace Krawlr.Core
 
                 // easy config
                 { "q|quiet", "Run quietly with less detailed console logging.", v => Quiet = v != null },
-                { "no-follow-links", "After loading a page don't find and follow links on the page", v => NoFollowLinks = v != null },
+                { "ignore-links", "After loading a page Krawlr will not follow links on the page", v => IgnoreLinks = v != null },
                 { "ignore-guids", "When analysing URLs remove guids as this removes repeat crawling like /items/item/{guid}. Value is yes / no (Default: yes)", v => IgnoreGuids = v != null },
                 { "max-follow-links=", "Limit the number of pages to crawl. Default: 0 (no limit).", v => MaxPageLinksToFollow = int.Parse(v) },
 
@@ -80,7 +80,7 @@ namespace Krawlr.Core
         public string BaseUrl { get; protected set; }
 
         public bool Quiet { get; protected set; }
-        public bool NoFollowLinks { get; protected set; }
+        public bool IgnoreLinks { get; protected set; }
         public bool IgnoreGuids { get; protected set; }
         public int MaxPageLinksToFollow { get; protected set; }
 
