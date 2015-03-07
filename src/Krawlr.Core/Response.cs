@@ -22,7 +22,7 @@
 
         public DateTime Created { get; protected set; }
         public string Url { get; set; }
-        public string Domain { get { return DomainPart(this.Url); } }
+        public string Domain { get { return DomainPart(Url); } }
         public string RelativeUrl
         {
             get

@@ -111,7 +111,7 @@ namespace Krawlr.Core.Services
                 // Update the BusMirror to reflect processing is complete
                 BusMirror.TryUpdate(url, true, false);
                 if (Progress != null)
-                    Progress(this, new ProgressEventArgs { Count = BusMirror.Count, Remaining = this.QueueSize });
+                    Progress(this, new ProgressEventArgs { Count = BusMirror.Count, Remaining = QueueSize });
             }
         }
     }

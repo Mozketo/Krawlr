@@ -26,7 +26,7 @@ namespace Krawlr.Core
 
         protected void Parse(string[] args)
         {
-            this.WebDriver = new ConfigurationWebDriver();
+            WebDriver = new ConfigurationWebDriver();
 
             bool showHelp = false;
             var optionSet = new OptionSet
