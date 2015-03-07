@@ -28,7 +28,8 @@ namespace Krawlr.Console
                 var configuration = container.Resolve<IConfiguration>();
                 if (configuration.HasError)
                     return (int)ExitCode.InvalidArgs;
-                log.Info($"Starting Krawlr with URL {configuration.BaseUrl}");
+                log.Exclaim($"Starting Krawler v{typeof(Program).Assembly.GetName().Version}");
+                log.Exclaim($"  with URL {configuration.BaseUrl}");
 
                 if (configuration.Output.ContainsEx("Data Source="))
                     container.Register<IWriterService, SqlServerWriter>(Reuse.Singleton);

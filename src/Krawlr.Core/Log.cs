@@ -10,6 +10,7 @@ namespace Krawlr.Core
     {
         void WriteLine(string s, ConsoleColor color);
         void Debug(string s);
+        void Exclaim(string s);
         void Info(string s);
         void Warn(string s);
         void Error(string s);
@@ -30,6 +31,11 @@ namespace Krawlr.Core
         public void Debug(string s)
         {
             WriteLine(s, ConsoleColor.DarkGray);
+        }
+
+        public void Exclaim(string s)
+        {
+            WriteLine(s, ConsoleColor.Cyan);
         }
 
         public void Info(string s)
