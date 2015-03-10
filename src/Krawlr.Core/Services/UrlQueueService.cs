@@ -106,7 +106,8 @@ namespace Krawlr.Core.Services
                 _writer.Write(response.Response);
 
                 // Parse for new links
-                Add(response.Links);
+                if (!_options.IgnoreLinks)
+                    Add(response.Links);
 
                 // Update the BusMirror to reflect processing is complete
                 BusMirror.TryUpdate(url, true, false);
