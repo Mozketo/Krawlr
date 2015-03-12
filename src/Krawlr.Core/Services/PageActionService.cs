@@ -6,6 +6,7 @@ using Jint;
 using OpenQA.Selenium;
 using MZMemoize;
 using MZMemoize.Extensions;
+using OpenQA.Selenium.Support.UI;
 
 namespace Krawlr.Core.Services
 {
@@ -45,7 +46,8 @@ namespace Krawlr.Core.Services
         {
             var engine = new Engine(cfg => cfg.AllowClr(typeof(By).Assembly))
                 .SetValue("url", url)
-                .SetValue("driver", _driver);
+                .SetValue("driver", _driver)
+                .SetValue("driverWait", new WebDriverWait(_driver, TimeSpan.FromSeconds(20)));
 
             var path = _configuration.PageScriptsPath;
             readFiles(path).Iter(source => engine.Execute(source));
