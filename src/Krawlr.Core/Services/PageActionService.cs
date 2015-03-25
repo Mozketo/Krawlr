@@ -46,8 +46,8 @@ namespace Krawlr.Core.Services
         {
             var engine = new Engine(cfg => cfg.AllowClr(typeof(By).Assembly))
                 .SetValue("url", url)
-                .SetValue("driver", _driver)
-                .SetValue("driverWait", new WebDriverWait(_driver, TimeSpan.FromSeconds(20)));
+                .SetValue("driver", _driver);
+                //.SetValue("driverWait", new WebDriverWait(_driver, TimeSpan.FromSeconds(20)));
 
             var path = _configuration.PageScriptsPath;
             readFiles(path).Iter(source => engine.Execute(source));
